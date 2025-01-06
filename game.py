@@ -1,14 +1,10 @@
-import models
+from models import *
+from board import *
+
 #import board
-import csv
+cars = get_cars('gameboards/Rushhour6x6_1.csv')
+board = create_board(6)
+#print(board)
 
-# Function to load cars from the CSV file
-def get_cars():
-    filename = 'gameboards/Rushhour6x6_1.csv'
-    with open(filename, mode ='r')as file:
-        for lines in file:
-                print(lines)
-
-# Entry point of the script
-if __name__ == "__main__":
-    get_cars()
+board = place_cars(board, cars)
+print(board)
