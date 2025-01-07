@@ -2,7 +2,6 @@ import numpy as np
 from models import *
 import csv
 
-
 def get_cars(filename):
     cars = []
     with open(filename, mode ='r')as file:
