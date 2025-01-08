@@ -3,8 +3,11 @@ from board import *
 import random
 
 
+size = 6
+game = 1
+
 # create game board and show it
-board = Board('gameboards/Rushhour12x12_7.csv', 12)
+board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size)
 
 import random
 
