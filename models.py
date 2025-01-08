@@ -78,19 +78,31 @@ class Board:
             car = self.cars[CAR]
             # see what the orientation is of the car and print it accordingly
             if car.orientation == "H":
-                if car.car == 'X':
-                    for j in range(0, car.length):
-                        self.board[car.row-1][car.col+j-1] = f"{car.color}{'X'}\033[0m"
-                else:
-                    for j in range(0, car.length):
-                        self.board[car.row-1][car.col+j-1] = f"{car.color}{'#'}\033[0m"
+                for j in range(0, car.length):
+                    self.board[car.row-1][car.col+j-1] = car
             elif car.orientation == "V":
                 for j in range(0, car.length):
-                    self.board[car.row+j-1][car.col-1] = f"{car.color}{'#'}\033[0m"
+                    self.board[car.row+j-1][car.col-1] = car
+
+        self.history = []
+
     # print board
     def print(self):
-        for row in self.board:
-            print(' '.join(row))
+        for i in range(0, self.size):
+            for j in range(0, self.size):
+                car = self.board[i][j]
+                if self.board[i][j] == '_':
+                    print('_', end = '')
+                else:
+                    if car.car =='X':
+                        print(f"{car.color}{'X'}\033[0m", end ='')  
+                    else:
+                        print(f"{car.color}{'#'}\033[0m", end ='')
+                print
+                if j == self.size - 1:
+                    print()
+                else:
+                    print(' ', end = '')
     
     def check_move(self, car, direction):
         car = self.cars[car]  # Get the car object
@@ -117,30 +129,30 @@ class Board:
             if car.orientation == "H":
                 if car.car == 'X':
                     if direction == 1:
-                        self.board[car.row - 1][car.col - 2] = f"{car.color}{'X'}\033[0m"
+                        self.board[car.row - 1][car.col - 2] = car
                         self.board[car.row - 1][car.col + car.length - 2] = '_'
                         car.col -= 1
                     if direction == 2:
                         self.board[car.row - 1][car.col - 1] = '_'
-                        self.board[car.row - 1][car.col + car.length - 1] = f"{car.color}{'X'}\033[0m"
+                        self.board[car.row - 1][car.col + car.length - 1] = car
                         car.col += 1
                 else:
                     if direction == 1:
-                        self.board[car.row - 1][car.col - 2] = f"{car.color}{'#'}\033[0m"
+                        self.board[car.row - 1][car.col - 2] = car
                         self.board[car.row - 1][car.col + car.length - 2] = '_'
                         car.col -= 1
                     if direction == 2:
                         self.board[car.row - 1][car.col - 1] = '_'
-                        self.board[car.row - 1][car.col + car.length - 1] = f"{car.color}{'#'}\033[0m"
+                        self.board[car.row - 1][car.col + car.length - 1] = car
                         car.col += 1
             elif car.orientation == "V":
                 if direction == 1:
-                    self.board[car.row - 2][car.col - 1] = f"{car.color}{'#'}\033[0m"
+                    self.board[car.row - 2][car.col - 1] = car
                     self.board[car.row + car.length - 2][car.col - 1] = '_'
                     car.row -= 1
                 if direction == 2:
                     self.board[car.row - 1][car.col - 1] = '_'
-                    self.board[car.row + car.length - 1][car.col - 1] = f"{car.color}{'#'}\033[0m"
+                    self.board[car.row + car.length - 1][car.col - 1] = car
                     car.row += 1
             else:
                 print("FOUT") 

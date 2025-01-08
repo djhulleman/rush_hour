@@ -1,5 +1,4 @@
 from models import *
-from board import *
 import random
 
 
@@ -8,8 +7,6 @@ game = 1
 
 # create game board and show it
 board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size)
-
-import random
 
 def solve(board):
     XX = board.cars["X"] 
@@ -44,4 +41,4 @@ def solve(board):
 
 
 
-solve(board)
+#solve(board)
