@@ -4,7 +4,7 @@ import random
 
 
 # create game board and show it
-board = Board('gameboards/Rushhour9x9_6.csv', 9)
+board = Board('gameboards/Rushhour12x12_7.csv', 12)
 
 import random
 

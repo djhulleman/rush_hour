@@ -16,8 +16,11 @@ class Board:
             next(csvFile)
             for i, lines in enumerate(csvFile):
                 # store the car by using their names and add a color
-                var_name = lines[0]  
-                car = Car(lines[0], lines[1], int(lines[2]), int(lines[3]), int(lines[4]), colors[i + 4])
+                var_name = lines[0]
+                if lines[0] == 'X':
+                    car = Car(lines[0], lines[1], int(lines[2]), int(lines[3]), int(lines[4]), colors[4])
+                else:
+                    car = Car(lines[0], lines[1], int(lines[2]), int(lines[3]), int(lines[4]), colors[i + 5])
                 self.cars[var_name] = car
 
         # create matrix for board with all _
@@ -28,10 +31,10 @@ class Board:
             # see what the orientation is of the car and print it accordingly
             if car.orientation == "H":
                 for j in range(0, car.length):
-                    self.board[car.row-1][car.col+j-1] = f"{car.color}{car.car}\033[0m"
+                    self.board[car.row-1][car.col+j-1] = f"{car.color}{'#'}\033[0m"
             elif car.orientation == "V":
                 for j in range(0, car.length):
-                    self.board[car.row+j-1][car.col-1] = f"{car.color}{car.car}\033[0m"
+                    self.board[car.row+j-1][car.col-1] = f"{car.color}{'#'}\033[0m"
     # print board
     def print(self):
         for row in self.board:
@@ -61,21 +64,21 @@ class Board:
             car = self.cars[car]
             if car.orientation == "H":
                 if direction == 1:
-                    self.board[car.row - 1][car.col - 2] = f"{car.color}{car.car}\033[0m"
+                    self.board[car.row - 1][car.col - 2] = f"{car.color}{'#'}\033[0m"
                     self.board[car.row - 1][car.col + car.length - 2] = '_'
                     car.col -= 1
                 if direction == 2:
                     self.board[car.row - 1][car.col - 1] = '_'
-                    self.board[car.row - 1][car.col + car.length - 1] = f"{car.color}{car.car}\033[0m"
+                    self.board[car.row - 1][car.col + car.length - 1] = f"{car.color}{'#'}\033[0m"
                     car.col += 1
             elif car.orientation == "V":
                 if direction == 1:
-                    self.board[car.row - 2][car.col - 1] = f"{car.color}{car.car}\033[0m"
+                    self.board[car.row - 2][car.col - 1] = f"{car.color}{'#'}\033[0m"
                     self.board[car.row + car.length - 2][car.col - 1] = '_'
                     car.row -= 1
                 if direction == 2:
                     self.board[car.row - 1][car.col - 1] = '_'
-                    self.board[car.row + car.length - 1][car.col - 1] = f"{car.color}{car.car}\033[0m"
+                    self.board[car.row + car.length - 1][car.col - 1] = f"{car.color}{'#'}\033[0m"
                     car.row += 1
             else:
                 print("FOUT") 
