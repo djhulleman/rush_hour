@@ -1,10 +1,9 @@
 import csv
 
 class Data:
-
     def __init__(self):
         self.output_data = [
-            ["move", "car"]
+            ["car", "move"]
         ]
     def save_move(self, car, direction):    
         car_name = car.car

@@ -40,5 +40,5 @@ def solve(board):
     else:
         print("Failed to solve the puzzle within the maximum number of iterations.")
 
-solve(board)
-data.export_moves()
+    solve(board)
+    data.export_moves()
