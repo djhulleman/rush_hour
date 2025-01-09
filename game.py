@@ -1,12 +1,16 @@
 from models import *
+from data import *
 import random
 
 # select board size and game
 size = 6
 game = 1
 
+# Create data process 
+data = Data()
+
 # create game board
-board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size)
+board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
 
 def solve(board):
     '''algorithm that takes random steps to solve the puzzle'''
@@ -36,8 +40,5 @@ def solve(board):
     else:
         print("Failed to solve the puzzle within the maximum number of iterations.")
 
-
-
-
-
-#solve(board)
+solve(board)
+data.export_moves()
