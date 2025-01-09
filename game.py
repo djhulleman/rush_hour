@@ -9,7 +9,7 @@ game = 1
 board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size)
 
 def solve(board):
-    '''algarithem that takes rendom steps to solve the puzzle'''
+    '''algorithm that takes random steps to solve the puzzle'''
     # create object for car that needs to get out
     XX = board.cars["X"] 
     complete = False
@@ -18,7 +18,7 @@ def solve(board):
     max_iterations = 10000000
 
     while not complete and n < max_iterations:
-        # chose rendom car and rendom direction
+        # chose random car and random direction
         random_car = random.choice(list(board.cars.keys()))  
         random_move = random.choice([1, 2])
         # move the car if possible
