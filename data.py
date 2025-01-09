@@ -3,15 +3,16 @@ import csv
 class Data:
 
     def __init__(self):
-        self.output_data = ["car,move"]
-
+        self.output_data = [
+            ["move", "car"]
+        ]
     def save_move(self, car, direction):    
         car_name = car.car
 
         if direction == 1:
-            self.output_data.append(f"{car_name},-1")
+            self.output_data.append([car_name, "-1"])
         elif direction == 2:
-            self.output_data.append(f"{car_name},1")
+            self.output_data.append([car_name, "1"])
         else:
             self.output_data.append("Fout")
     
@@ -20,8 +21,7 @@ class Data:
         
         with open(file_name, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
-            for line in self.output_data:
-                writer.writerow([line])  # Each line is written as a single column
+            writer.writerows(self.output_data)
 
         print(f"Data is geexporteerd in {file_name}")
 
