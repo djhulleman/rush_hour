@@ -29,10 +29,8 @@ def solve(board):
         board.move(random_car, random_move) 
         n += 1
         print(f"Move {n}: Car {random_car} moved {'left/up' if random_move == 1 else 'right/down'}")
-
-        # The "X" car is one step before the exit and the final position is empty
-        if XX.col == board.size - 2 and board.board[XX.row - 1][board.size - 1] == '_':
-            complete = True
+        
+        complete = board.check_finish()
 
     if complete:
         print(f"Puzzle solved in {n} moves!")
