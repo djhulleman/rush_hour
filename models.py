@@ -1,10 +1,12 @@
+from data import *
 import csv
 
 class Board:
     '''create a board opject with the cars on it'''
-    def __init__(self, filename, size):
+    def __init__(self, filename, size, data):
         
         self.size = size
+        self.data = data
         
         # create a self to store the cars in
         self.cars = {}
@@ -149,11 +151,13 @@ class Board:
                         self.board[car.row - 1][car.col + car.length - 2] = '_'
                         # change position and save
                         car.col -= 1
+                        self.data.save_move(car, direction)
                     # Moving right
                     if direction == 2:
                         self.board[car.row - 1][car.col - 1] = '_'
                         self.board[car.row - 1][car.col + car.length - 1] = car
                         car.col += 1
+                        self.data.save_move(car, direction)
                 else:
                     # Moving left
                     if direction == 1:
@@ -161,11 +165,13 @@ class Board:
                         self.board[car.row - 1][car.col + car.length - 2] = '_'
                         # change position and save
                         car.col -= 1
+                        self.data.save_move(car, direction)
                     # Moving right
                     if direction == 2:
                         self.board[car.row - 1][car.col - 1] = '_'
                         self.board[car.row - 1][car.col + car.length - 1] = car
                         car.col += 1
+                        self.data.save_move(car, direction)
             elif car.orientation == "V":
                 # Moving up
                 if direction == 1:
@@ -173,11 +179,13 @@ class Board:
                     self.board[car.row + car.length - 2][car.col - 1] = '_'
                     # change position and save
                     car.row -= 1
+                    self.data.save_move(car, direction)
                 # moving down
                 if direction == 2:
                     self.board[car.row - 1][car.col - 1] = '_'
                     self.board[car.row + car.length - 1][car.col - 1] = car
                     car.row += 1
+                    self.data.save_move(car, direction)
             else:
                 print("FOUT") 
 class Car:
