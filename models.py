@@ -95,12 +95,14 @@ class Board:
 
     # print board
     def print(self):
+        '''print current board'''
         for i in range(0, self.size):
             for j in range(0, self.size):
                 car = self.board[i][j]
                 if self.board[i][j] == '_':
                     print('_', end = '')
                 else:
+                    # car X; red car will be printed differently
                     if car.car =='X':
                         print(f"{car.color}{'X'}\033[0m", end ='')  
                     else:
@@ -137,6 +139,7 @@ class Board:
         return False
         
     def check_finish(board):
+        '''check if red car is at the end'''
         XX = board.cars["X"] 
         # The "X" car is one step before the exit and the final position is empty
         if XX.col == board.size - 2 and board.board[XX.row - 1][board.size - 1] == '_':

@@ -29,7 +29,7 @@ def solve(board):
         board.move(random_car, random_move) 
         n += 1
         print(f"Move {n}: Car {random_car} moved {'left/up' if random_move == 1 else 'right/down'}")
-        
+        # check if the red car is at the end
         complete = board.check_finish()
 
     if complete:

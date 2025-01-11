@@ -13,7 +13,7 @@ board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
 
 amount = []
 
-while len(amount) < 100:
+while len(amount) < 10:
     solve(board)
     data.export_moves()
     file_name = "output.csv" 
@@ -22,7 +22,7 @@ while len(amount) < 100:
         line_count = sum(1 for line in file) - 1
     amount.append([line_count])
     
-new_file = "output_sum.csv"  
+new_file = "rendom_output_sum.csv"  
 with open(new_file, mode='w', newline='', encoding='utf-8') as file:
     writer = csv.writer(file)
     writer.writerows(amount)

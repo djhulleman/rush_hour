@@ -7,8 +7,8 @@ import time
 
 def draw_board_dynamic(board, ax, car_colors):
     '''Graphically update the Rush Hour board dynamically during each move'''
-
-    ax.clear()  # Clear the previous board state
+    # Clear the previous board state
+    ax.clear()
     ax.set_xlim(0, board.size)
     ax.set_ylim(0, board.size)
     ax.set_aspect('equal')
@@ -20,10 +20,12 @@ def draw_board_dynamic(board, ax, car_colors):
 
     # Draw cars
     for car in board.cars.values():
-        if car.orientation == "H":  # Horizontal cars
+        # Horizontal cars
+        if car.orientation == "H":
             x, y = car.col - 1, board.size - car.row
             width, height = car.length, 1
-        else:  # Vertical cars
+        # Vertical cars
+        else:
             x, y = car.col - 1, board.size - car.row - car.length + 1
             width, height = 1, car.length
 
@@ -31,7 +33,7 @@ def draw_board_dynamic(board, ax, car_colors):
             patches.Rectangle(
                 (x, y), width, height,
                 edgecolor='black',
-                facecolor=car_colors[car.car]  # Use assigned color
+                facecolor=car_colors[car.car]
             )
         )
         ax.text(
@@ -45,7 +47,8 @@ def draw_board_dynamic(board, ax, car_colors):
     ax.set_yticklabels([])
     ax.tick_params(left=False, bottom=False)
     ax.set_frame_on(False)
-    plt.pause(0.000001)  # Pause to make the animation smooth
+    # Pause to make the animation smooth
+    plt.pause(0.000001)
 
 
 
@@ -56,7 +59,8 @@ def solve_with_visualization(board):
     XX = board.cars["X"] 
     complete = False
     n = 0
-    max_iterations = 100000  # Prevent infinite loops
+    # Prevent infinite loops
+    max_iterations = 100000
 
     # Initialize the plot
     fig, ax = plt.subplots(figsize=(6, 6))
