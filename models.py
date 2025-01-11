@@ -135,7 +135,13 @@ class Board:
                 if car.row + car.length - 1 < self.size and self.board[car.row + car.length - 1][car.col - 1] == '_':
                     return True
         return False
-
+        
+    def check_finish(board):
+        XX = board.cars["X"] 
+        # The "X" car is one step before the exit and the final position is empty
+        if XX.col == board.size - 2 and board.board[XX.row - 1][board.size - 1] == '_':
+            board.move('X',2)
+            return True
 
     def move(self, car, direction):
         '''move car on game board'''
