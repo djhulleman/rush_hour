@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from game import *
+from models import *
 from data import *
 import random
 import time
@@ -20,11 +20,11 @@ def draw_board_dynamic(board, ax, car_colors):
 
     # Draw cars
     for car in board.cars.values():
-        if car.orientation == "H":
+        if car.orientation == "H":  # Horizontal cars
             x, y = car.col - 1, board.size - car.row
             width, height = car.length, 1
-        else:
-            x, y = car.col - 1, board.size - car.row - 1
+        else:  # Vertical cars
+            x, y = car.col - 1, board.size - car.row - car.length + 1
             width, height = 1, car.length
 
         ax.add_patch(
@@ -46,6 +46,7 @@ def draw_board_dynamic(board, ax, car_colors):
     ax.tick_params(left=False, bottom=False)
     ax.set_frame_on(False)
     plt.pause(0.000001)  # Pause to make the animation smooth
+
 
 
 def solve_with_visualization(board):
@@ -100,10 +101,8 @@ def solve_with_visualization(board):
 
 
 
-size = 12
-game = 7
+size = 6
+game = 2
 data = Data()
 board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
-
 solve_with_visualization(board)
-
