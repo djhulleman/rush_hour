@@ -1,3 +1,8 @@
+"""
+This model can solve the games 6x6_1, 6x6_2, 6x6_3, 9x9,4, 9x9_5 en 9x9_6
+Cannot solve 12x12_7 within an acceptable timespan
+"""
+
 from models import *
 from data import *
 import random
@@ -24,9 +29,6 @@ def save_board(cars, saved_boards):
     saved_boards.append(cars_copy)
 
 def compare_board(previous_cars, current_car):
-    # Check if both dictionaries have the same car keys
-    if set(previous_cars.keys()) != set(current_car.keys()):
-        return False
 
     # Now compare each car's important properties.
     for key in previous_cars:
@@ -34,10 +36,8 @@ def compare_board(previous_cars, current_car):
         car2 = current_car[key]
         
         # Compare orientation, row, col, and length.
-        if (car1.orientation != car2.orientation or 
-            car1.row != car2.row or 
-            car1.col != car2.col or 
-            car1.length != car2.length):
+        if ( car1.row != car2.row or 
+            car1.col != car2.col ):
             #print("No Setup similar")
             return False
     #print("similar setup found")
@@ -68,9 +68,9 @@ def create_board(board, size, position):
             for j in range(0, car.length):
                 board.board[car.row+j-1][car.col-1] = car
 
-sizee = 9
+sizee = 12
 # create game board and show it
-board = Board('gameboards/Rushhour9x9_4.csv', sizee, data)
+board = Board('gameboards/Rushhour12x12_7.csv', sizee, data)
 save_board(board.cars, saved_boards)
 
 def solve(board):
