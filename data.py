@@ -28,4 +28,7 @@ class Data:
             writer.writerows(self.output_data)
 
         print(f"Data is geexporteerd in {file_name}")
+        
+    def del_moves(self, end):
+        del self.output_data[end+1:]
 
