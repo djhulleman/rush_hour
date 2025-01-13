@@ -1,5 +1,5 @@
-from data import *
 import csv
+from rushhour.classes.car import Car
 
 class Board:
     '''create a board opject with the cars on it'''
@@ -197,12 +197,3 @@ class Board:
                     self.data.save_move(car, direction)
             else:
                 print("FOUT") 
-class Car:
-    '''create a car object'''
-    def __init__(self, car, orientation, col, row, length, color):
-        self.car = car
-        self.orientation = orientation
-        self.col = col
-        self.row = row
-        self.length = length
-        self.color = color

@@ -1,0 +1,109 @@
+import random
+import copy
+from rushhour.classes.board import Board
+from rushhour.classes.car import Car
+from rushhour.classes.data import Data
+
+saved_boards =[]
+cycles = []
+
+data = Data()
+    
+def save_board(cars, saved_boards):
+    cars_copy = {}
+    for key, car in cars.items():
+        car_copy = Car(
+            car=car.car,
+            orientation=car.orientation,
+            col=car.col,
+            row=car.row,
+            length=car.length,
+            color=car.color
+        )
+
+        cars_copy[key] = car_copy
+    saved_boards.append(cars_copy)
+
+def compare_board(previous_cars, current_car):
+    # Check if both dictionaries have the same car keys
+    if set(previous_cars.keys()) != set(current_car.keys()):
+        return False
+
+    # Now compare each car's important properties.
+    for key in previous_cars:
+        car1 = previous_cars[key]
+        car2 = current_car[key]
+        
+        # Compare orientation, row, col, and length.
+        if (car1.orientation != car2.orientation or 
+            car1.row != car2.row or 
+            car1.col != car2.col or 
+            car1.length != car2.length):
+            #print("No Setup similar")
+            return False
+    #print("similar setup found")
+    return True
+
+def compare_boards(saved_boards, current_cars):
+    for i, previous_car in enumerate(saved_boards):
+        if compare_board(previous_car, current_cars):
+            return i
+    return None
+
+def create_board(board, size, position):
+    # create matrix for board with all '_'
+    board.board = [['_'] * size for _ in range(size)]
+
+    # get car properties from saved_boards
+    board.cars = copy.deepcopy(saved_boards[position])
+
+    # add the cars to the board
+    for CAR in board.cars:
+        car = board.cars[CAR]
+        # see what the orientation is of the car and print it accordingly
+        if car.orientation == "H":
+            for j in range(0, car.length):
+                board.board[car.row-1][car.col+j-1] = car
+        elif car.orientation == "V":
+            for j in range(0, car.length):
+                board.board[car.row+j-1][car.col-1] = car
+
+def random_with_memory(board_file):
+
+    size = int(board_file[-7])  # Assuming board size is encoded in the filename
+    data = Data()
+    board = Board(board_file, size, data)
+    
+    XX = board.cars["X"]
+    complete = False
+    n = 0
+    s = 0
+    max_iterations = 10000000  # Prevent infinite loops
+
+    while not complete and n < max_iterations:
+        random_car = random.choice(list(board.cars.keys()))
+        random_move = random.choice([1, 2])
+
+        board.move(random_car, random_move)
+
+        comparison_result = compare_boards(saved_boards, board.cars)
+        if comparison_result is not None:
+            n = comparison_result
+            create_board(board, size, n)
+            del saved_boards[n+1:]
+            data.del_moves(n)
+        else: 
+            save_board(board.cars, saved_boards)
+            n += 1
+        s += 1
+
+
+        complete = board.check_finish()
+        if s%10000 == 0:
+            print(f"loading, {s} steps")
+
+    if complete:
+        print(f"Puzzle solved in {n} moves!")
+        return board
+    else:
+        print("Failed to solve the puzzle within the maximum number of iterations.")

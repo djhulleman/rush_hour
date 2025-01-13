@@ -31,4 +31,3 @@ class Data:
         
     def del_moves(self, end):
         del self.output_data[end+1:]
-
