@@ -1,106 +1,100 @@
-"""
-This model can solve the games 6x6_1, 6x6_2, 6x6_3, 9x9,4, 9x9_5 en 9x9_6
-Cannot solve 12x12_7 within an acceptable timespan
-"""
-
 from rushhour.classes.board import Board
 from rushhour.classes.board import Car
 from rushhour.classes.data import Data
 import random
-import copy
 
-saved_boards =[]
-cycles = []
-
+saved_boards = []
+board_hashes = {}
 data = Data()
-    
-def save_board(cars, saved_boards):
-    cars_copy = {}
+
+def hash_board(board_copy, car_names):
+    cars_properties = []
+    for key in car_names:
+        r, c = board_copy[key]
+        cars_properties.append(f"{key}:{r}:{c}")
+    return "|".join(cars_properties)
+
+def save_board(cars, saved_boards, board_hashes, car_names):
+    board_copy = {}
     for key, car in cars.items():
-        car_copy = Car(
-            car=car.car,
-            orientation=car.orientation,
-            col=car.col,
-            row=car.row,
-            length=car.length,
-            color=car.color
-        )
+        board_copy[key] = (car.row, car.col)
+    
+    saved_boards.append(board_copy)
 
-        cars_copy[key] = car_copy
-    saved_boards.append(cars_copy)
+    h = hash_board(board_copy, car_names)
+    board_hashes[h] = len(saved_boards) - 1
 
-def compare_board(previous_cars, current_car):
+def compare_boards(cars, board_hashes, car_names):
+    current_board_copy = {}
+    for key, car in cars.items():
+        current_board_copy[key] = (car.row, car.col)
 
-    # Now compare each car's important properties.
-    for key in previous_cars:
-        car1 = previous_cars[key]
-        car2 = current_car[key]
-        
-        # Compare orientation, row, col, and length.
-        if ( car1.row != car2.row or 
-            car1.col != car2.col ):
-            #print("No Setup similar")
-            return False
-    #print("similar setup found")
-    return True
-
-
-def compare_boards(saved_boards, current_cars):
-    for i, previous_car in enumerate(saved_boards):
-        if compare_board(previous_car, current_cars):
-            return i
-    return None
+    h = hash_board(current_board_copy, car_names)
+    return board_hashes.get(h, None)
 
 def create_board(board, size, position):
-    # create matrix for board with all '_'
+    # Reset the matrix
     board.board = [['_'] * size for _ in range(size)]
 
-    # get car properties from saved_boards
-    board.cars = copy.deepcopy(saved_boards[position])
+    # Retrieve stored (row, col) pairs from saved_boards
+    state_dict = saved_boards[position]
 
-    # add the cars to the board
-    for CAR in board.cars:
-        car = board.cars[CAR]
-        # see what the orientation is of the car and print it accordingly
+    # Update each car’s row and col
+    for car_key, (r, c) in state_dict.items():
+        board.cars[car_key].row = r
+        board.cars[car_key].col = c
+
+    # Place the cars on the 2D matrix
+    for car in board.cars.values():
         if car.orientation == "H":
-            for j in range(0, car.length):
-                board.board[car.row-1][car.col+j-1] = car
-        elif car.orientation == "V":
-            for j in range(0, car.length):
-                board.board[car.row+j-1][car.col-1] = car
+            for j in range(car.length):
+                board.board[car.row - 1][car.col + j - 1] = car
+        else:  # orientation == "V"
+            for j in range(car.length):
+                board.board[car.row + j - 1][car.col - 1] = car
 
+# Choose your board size and file
 sizee = 12
-# create game board and show it
 board = Board('gameboards/Rushhour12x12_7.csv', sizee, data)
-save_board(board.cars, saved_boards)
+
+car_names = board.cars.keys()
+car_list = list(board.cars.keys())
+
+save_board(board.cars, saved_boards, board_hashes, car_names)
 
 def solve(board):
-    XX = board.cars["X"]
     complete = False
-    n = 0
-    s = 0
-    max_iterations = 10000000  # Prevent infinite loops
+    n = 0  
+    s = 0  
+    max_iterations = 10000000  
 
     while not complete and n < max_iterations:
-        random_car = random.choice(list(board.cars.keys()))
+        random_car = random.choice(car_list)
         random_move = random.choice([1, 2])
 
         board.move(random_car, random_move)
 
-        comparison_result = compare_boards(saved_boards, board.cars)
+        comparison_result = compare_boards(board.cars, board_hashes, car_names)
         if comparison_result is not None:
+
             n = comparison_result
             create_board(board, sizee, n)
+
+            boards_to_remove = saved_boards[n+1:] 
+            for boardt in boards_to_remove:
+                h = hash_board(boardt, car_names)
+                board_hashes.pop(h, None)
+
             del saved_boards[n+1:]
             data.del_moves(n)
-        else: 
-            save_board(board.cars, saved_boards)
+
+        else:
+            save_board(board.cars, saved_boards, board_hashes, car_names)
             n += 1
+
         s += 1
-
-
         complete = board.check_finish()
-        if s%10000 == 0:
+        if s % 10000 == 0:
             print(f"loading, {s} steps")
 
     if complete:
@@ -111,26 +105,3 @@ def solve(board):
 
 solve(board)
 data.export_moves()
-
-# board.print()
-# print("")
-
-# board.move("A", 1)
-# compare_boards(saved_boards, board.cars)
-# if compare_boards(saved_boards, board.cars) == False:
-#     save_board(board.cars, saved_boards)
-
-# board.print()
-# print("")
-
-# board.move("A", 2)
-# compare_boards(saved_boards, board.cars)
-# if compare_boards(saved_boards, board.cars) == False:
-#     save_board(board.cars, saved_boards)
-
-# board.print()
-# print("")
-
-# create_board(board, 6, 1)
-
-# board.print()
