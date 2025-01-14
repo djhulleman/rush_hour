@@ -1,5 +1,6 @@
-from models import *
-from data import *
+from rushhour.classes.board import Board
+from rushhour.classes.data import Data
+from rushhour.algorithms.random_with_memory import *
 import random
 
 # select board size and game

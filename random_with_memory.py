@@ -3,8 +3,9 @@ This model can solve the games 6x6_1, 6x6_2, 6x6_3, 9x9,4, 9x9_5 en 9x9_6
 Cannot solve 12x12_7 within an acceptable timespan
 """
 
-from models import *
-from data import *
+from rushhour.classes.board import Board
+from rushhour.classes.board import Car
+from rushhour.classes.data import Data
 import random
 import copy
 
