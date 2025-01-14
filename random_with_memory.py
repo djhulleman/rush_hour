@@ -33,16 +33,16 @@ def compare_boards(cars, board_hashes, car_names):
     return board_hashes.get(h, None)
 
 def create_board(board, size, position):
-    # Reset the matrix
+
     board.board = [['_'] * size for _ in range(size)]
 
-    # Retrieve stored (row, col) pairs from saved_boards
-    state_dict = saved_boards[position]
+    # Get car properties from saved_boards list 
+    saved_board = saved_boards[position]
 
-    # Update each car’s row and col
-    for car_key, (r, c) in state_dict.items():
-        board.cars[car_key].row = r
-        board.cars[car_key].col = c
+    # Update each car’s row and col 
+    for car_name, (r, c) in saved_board.items():
+        board.cars[car_name].row = r
+        board.cars[car_name].col = c
 
     # Place the cars on the 2D matrix
     for car in board.cars.values():
