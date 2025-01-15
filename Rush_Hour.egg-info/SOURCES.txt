@@ -6,8 +6,14 @@ Rush_Hour.egg-info/dependency_links.txt
 Rush_Hour.egg-info/top_level.txt
 rushhour/__init__.py
 rushhour/algorithms/__init__.py
+rushhour/algorithms/improve_solution.py
 rushhour/algorithms/random.py
+rushhour/algorithms/random_with_memory.py
+rushhour/algorithms/random_with_plot.py
 rushhour/classes/__init__.py
 rushhour/classes/board.py
 rushhour/classes/car.py
 rushhour/classes/data.py
+rushhour/visualisation/__init__.py
+rushhour/visualisation/dynamic_board_draw.py
+rushhour/visualisation/plot_solutions.py
