@@ -21,7 +21,7 @@ class Data:
     def export_moves(self):
         '''makes file that has all the steps in them'''
         # create file
-        file_name = "output.csv"
+        file_name = "solutions/output.csv"
         # open the creades file and put the steps in
         with open(file_name, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)

@@ -1,24 +1,34 @@
 import random
+import matplotlib.pyplot as plt
+from matplotlib import patches
 
 def random_solve(board):
-    '''algorithm that takes random steps to solve the puzzle'''
-    # create object for car that needs to get out
+    """Algorithm that takes random steps to solve the puzzle."""
+    # Create object for the car that needs to get out
     XX = board.cars["X"] 
     complete = False
     n = 0
     # Prevent infinite loops
     max_iterations = 10000000
 
+    # Set up the dynamic plotting
+    fig, ax = plt.subplots(figsize=(6, 6))
+    plt.ion()  # Enable interactive mode
+
     while not complete and n < max_iterations:
-        # chose random car and random direction
+        # Choose a random car and a random direction
         random_car = random.choice(list(board.cars.keys()))  
         random_move = random.choice([1, 2])
-        # move the car if possible
-        board.move(random_car, random_move) 
+        # Move the car if possible
+        board.move(random_car, random_move)
         n += 1
         print(f"Move {n}: Car {random_car} moved {'left/up' if random_move == 1 else 'right/down'}")
-        # check if the red car is at the end
+
+        # Check if the red car is at the end
         complete = board.check_finish()
+
+    plt.ioff()  # Disable interactive mode
+    plt.show()  # Display the final board
 
     if complete:
         print(f"Puzzle solved in {n} moves!")
