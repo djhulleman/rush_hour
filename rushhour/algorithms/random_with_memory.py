@@ -1,11 +1,9 @@
 import random
 from rushhour.classes.board import Board
 from rushhour.classes.car import Car
-from rushhour.classes.data import Data
 
 saved_boards =[]
 board_hashes = {}
-data = Data()
 
 def hash_board(board_copy, car_names):
     cars_properties = []
@@ -53,12 +51,9 @@ def create_board(board, size, position):
             for j in range(car.length):
                 board.board[car.row + j - 1][car.col - 1] = car
 
-def random_with_memory(board_file):
+def random_with_memory(board):
 
-    size = int(board_file[-7])  # Assuming board size is encoded in the filename
-    data = Data()
-
-    board = Board(board_file, size, data)
+    size = board.size
     car_names = board.cars.keys()
     car_list = list(car_names)
 
@@ -87,7 +82,7 @@ def random_with_memory(board_file):
                 board_hashes.pop(h, None)
 
             del saved_boards[n+1:]
-            data.del_moves(n)
+            board.data.del_moves(n)
 
         else: 
             save_board(board.cars, saved_boards, board_hashes, car_names)
