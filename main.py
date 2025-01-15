@@ -5,19 +5,18 @@ from rushhour.algorithms.random_with_memory import *
 from rushhour.algorithms.random_with_plot import solve_with_visualization
 
 
-size = 12
-game = 7
+size = 6
+game = 1
+
+board_file = f"gameboards/Rushhour{size}x{size}_{game}.csv"
+solution_file = "solutions/solutions6x6_1.csv"
+
 # Create data process 
 data = Data()
 # create game board
-board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
+board = Board(f'{board_file}', size, data)
 
-
-board_file = "gameboards/Rushhour6x6_1.csv"
-solution_file = "solutions/solutions6x6_1.csv"
-#plot_solution(board_file, solution_file)
-
-finished = random_with_memory(board_file)
+finished = random_with_memory(board)
 
 print(finished.data.output_data)
 finished.data.export_moves()
