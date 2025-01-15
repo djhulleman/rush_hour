@@ -98,6 +98,6 @@ def random_with_memory(board):
 
     if complete:
         print(f"Puzzle solved in {n} moves!")
-        board.data.export_moves()
+        board.data.export_moves("solutions/output.csv")
     else:
         print("Failed to solve the puzzle within the maximum number of iterations.")
