@@ -1,6 +1,4 @@
 import random
-from rushhour.classes.board import Board
-from rushhour.classes.car import Car
 
 saved_boards =[]
 board_hashes = {}
