@@ -4,6 +4,7 @@ from rushhour.visualisation.plot_solutions import plot_solution
 from rushhour.algorithms.random_with_memory import *
 from rushhour.algorithms.random_with_plot import solve_with_visualization
 from rushhour.algorithms.improve_solution import *
+from rushhour.algorithms.comparing import *
 
 
 size = 6
@@ -25,3 +26,5 @@ solve_with_visualization(board)
 
 solution_file = "solutions/output.csv"
 plot_solution(board_file, solution_file)
+
+run_compairing(size, game)

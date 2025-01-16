@@ -29,3 +29,11 @@ class Data:
         
     def del_moves(self, end):
         del self.output_data[end+1:]
+    
+    def save_list_moves(self, car_name, direction):
+        if direction == 1:
+            self.output_data.append([car_name, "-1"])
+        elif direction == 2:
+            self.output_data.append([car_name, "1"])
+        else:
+            self.output_data.append("Fout")
