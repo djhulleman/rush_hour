@@ -29,6 +29,12 @@ class Memory:
 
         h = self.hash_board(current_board_copy, car_names)
         return self.board_hashes.get(h, None)
+    
+    def del_hashes(self, memory, n, car_names):
+        boards_to_remove = memory.saved_boards[n+1:] 
+        for boardt in boards_to_remove:
+            h = memory.hash_board(boardt, car_names)
+            memory.board_hashes.pop(h, None)
 
     def create_board(self, board, size, position):
 
