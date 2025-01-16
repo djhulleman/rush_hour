@@ -2,129 +2,138 @@ import csv
 from rushhour.classes.data import Data
 from rushhour.classes.board import Board
 from rushhour.algorithms.random_with_memory import *
+from itertools import combinations
 import time
 import os
 
 # select board size and game
 size = 6
-game = 3
+game = 1
 
 # Create data process 
-data = Data()
 board_file = f'gameboards/Rushhour{size}x{size}_{game}.csv'
-paths = {}
+
 
 # Helper function to create a unique file name based on timestamp
 def generate_unique_filename():
-    timestamp = int(time.time() * 1000)  # Current timestamp in milliseconds
+    # Current timestamp in nanoseconds
+    timestamp = time.time_ns()
     return f"output_{timestamp}.csv"
 
 def make_dict(file_name, dict): 
     # Count the lines in the file to store it with the file name
     line_count = sum(1 for line in open(file_name))  # count lines in file
-    dict[line_count] = file_name
+    dict[file_name] = line_count
+        
 
-def compare_files(path1, path2):
+def compare_files(path1, path2, output_name):
     '''see how much file compair and save the comapires'''
-    output_path = 'overlap_output.csv'
-    print(type(path1), type(path2), type(output_path))
-    with open(path1, 'rb') as f1, open(path2, 'rb') as f2, open(output_path, 'wb') as output:
-        index = 0
+    aantal = 0
+    with open(path1, 'r') as f1, open(path2, 'r') as f2, open(output_name, 'w', newline='') as output:
         while True:
-            byte1 = f1.read(1)
-            byte2 = f2.read(1)
+            aantal += 1
+            line1 = f1.readline()
+            line2 = f2.readline()
             # If we reach the end of one of the files or bytes differ, stop
-            if byte1 != byte2 or not byte1 or not byte2:
+            if line1 != line2 or not line1 or not line2:
                 break
-            output.write(byte1)
-        return output_path
+            print(line1)
+            output.write(line1) 
+    return aantal
 
+def get_board(overlap, board_overlap):
+    '''make a board that has the overlapping steps'''
+    with open(overlap, mode='r') as file:
+        csvFile = csv.reader(file)
+        next(csvFile)
+        for i, lines in enumerate(csvFile):
+            direction = 0
+            move = int(lines[1])
+            if move == 1:
+                direction = 2
+            elif move == -1:
+                direction = 1
+            if board_overlap.move(lines[0], direction):
+                print(f"Applied move {lines[0]} with direction {direction}")
+    return board_overlap
 
 
 '''take random paths'''
+paths = {}
 teller = 0
-while teller < 3:
-    finished = random_with_memory(board_file)
+while teller < 20:
+    data = Data()
+    board = Board(board_file, size, data)
+    finished = random_with_memory(board)
     name = generate_unique_filename()
     finished.data.export_moves(name)
     line_count = 0 
     make_dict(name, paths)
     teller += 1
-    print(teller)
-
-print("one done")
 
 '''compair rendom paths'''
-# sort the keys form smallest to biggeste
-sorted_keys = sorted(paths.keys())
-first_smallest_key = sorted_keys[0]
-second_smallest_key = sorted_keys[1]
-overlap = compare_files(paths[first_smallest_key], paths[second_smallest_key])
-
-print("two done")
-
-'''run the compaired path'''
-board = Board(board_file, size, data)
-with open(overlap, mode='r') as file:
-    csvFile = csv.reader(file)
-    next(csvFile)
-    for i, lines in enumerate(csvFile):
-        direction = 0
-        move = int(lines[1])
-        if move == 1:
-            direction = 2
-        elif move == -1:
-            direction = 1
-        board.move(lines[0], direction)
-
-print("three done")
-
-def random_solve(input_board, file_name):
-    '''algorithm that takes random steps to solve the puzzle'''
-    # create object for car that needs to get out 
-    complete = False
-    n = 0
-    # Prevent infinite loops
-    max_iterations = 3
-    while not complete and n < max_iterations:
-        # chose random car and random direction
-        random_car = random.choice(list(input_board.cars.keys()))  
-        random_move = random.choice([1, 2])
-        # move the car if possible
-        input_board.move(random_car, random_move) 
-        n += 1
-        # check if the red car is at the end
-        complete = input_board.check_finish()
-    data.export_moves(file_name)
+sorted_items = sorted(paths.items(), key=lambda item: item[1])
+# Get the top 10 smallest items
+top_10 = sorted_items[:10]
+overlap_results = []
+# Compare all pairs of the top 10 items
+for path1, path2 in combinations(top_10, 2):
+    name = generate_unique_filename()
+    aantal = compare_files(path1[0], path2[0], name)
+    overlap_results.append((name, aantal))
+# Get the maximum overlap result
+overlap_file_name = max(overlap_results, key=lambda x: x[1])[0]
 
 
 
 '''do random n times and save path'''
 N = 0
 best_path = {}
-while N < 20:
+while N < 10:
     name = generate_unique_filename()
-    random_solve(board,name)
+    # genereer een bord met de overlap stappen,
+    # sla daarna de rendom stappen erbij op
+    data = Data()
+    board_for_overlap = Board(board_file, size, data)
+    board_overlap = get_board(overlap_file_name, board_for_overlap)
+    finished = random_with_memory(board_overlap)
+    name = generate_unique_filename()
+    finished.data.export_moves(name)
     make_dict(name, best_path)
     N += 1
-print("four done")
 
 '''take the fastes path and make it the output'''
-sorted_keys = sorted(best_path.keys())
-smallest_key = sorted_keys[0]
-old_file = best_path[smallest_key]
+sorted_items = sorted(best_path.items(), key=lambda item: item[1])
+number = sorted_items[0]
+old_file = sorted_items[0][0]
 new_file = 'bestpath.csv'
 # Check if the file exists and rename
 if os.path.exists(old_file):
     os.rename(old_file, new_file)
 
 '''deleade files'''
-
-for file_path in best_path.values():
-    if os.path.exists(file_path):
-        os.remove(file_path) 
+# Delete files in paths except 'bestpath.csv'
+for file_path in paths.keys():
+    if os.path.exists(file_path) and file_path != 'bestpath.csv':
+        os.remove(file_path)
     else:
-        print("no file found")
-        
-os.remove("overlap_output.csv")
- 
+        print("No file found: ", file_path)
+
+# Delete files in best_path except 'bestpath.csv'
+for file_path in best_path.keys():
+    if os.path.exists(file_path) and file_path != 'bestpath.csv':
+        os.remove(file_path)
+    else:
+        print("No file found: ", file_path)
+
+for name, _ in overlap_results:
+    # Check if this is not the file with the highest overlap
+    if name != overlap_file_name:
+         # Delete the file
+        os.remove(name)
+        print(f"Deleted file: {name}")
+    else:
+        print(f"Error deleting file {name}")
+
+print(number)
+

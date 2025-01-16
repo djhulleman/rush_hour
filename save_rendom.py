@@ -7,15 +7,14 @@ from rushhour.classes.board import Board
 size = 6
 game = 3
 
-# Create data process 
-data = Data()
-
-# create game board
-board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
-
 amount = []
 
 while len(amount) < 20000:
+    # Create data process 
+    data = Data()
+    # create game board
+    board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
+    
     solve(board)
     data.export_moves()
     line_count = 0
