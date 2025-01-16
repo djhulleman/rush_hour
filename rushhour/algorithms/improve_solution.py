@@ -4,55 +4,49 @@ from rushhour.algorithms.random_with_memory import *
 import csv
 import random
 
-if __name__ == "__main__":
 
-    size = 6
-    game = 1
-    board_file = f"gameboards/Rushhour{size}x{size}_{game}.csv"
-    solution_file = "output.csv"
-    # Create data processes
-    data = Data()
-    memory = Memory()
-    # create game board
-    board = Board(f'{board_file}', size, data)
+size = 6
+game = 1
+board_file = f"../../gameboards/Rushhour{size}x{size}_{game}.csv"
+solution_file = "output.csv"
+ 
+def find_best_random(repetitions):
+    i = 0
+    n = float('inf')
 
-    n = random_with_memory(board, memory)
+    while i < repetitions:
+        data = Data()
+        memory = Memory()
+        board = Board(f'{board_file}', size, data)
 
-def find_best_path(board, input_csv):
-    print()
-    
+        board, t = random_with_memory(board, memory)
+        if t < n:
+            memory_best = memory
+            board_best = board
+            n = t
+            print(f'New smallest number of steps: {n}')
+        i += 1
 
+    print(f'smalles number of steps {n}')
 
-def random_position(input_csv):
-
-    with open(input_csv, mode='r') as input_file, open('cutted_csv.csv', mode='w', newline='') as output_file:
-        # Get length of csv file
-        csvFile_list = list(csv.reader(input_file))
-        csv_length = len(csvFile_list)
-        random_pos = random.randint(1, csv_length - 1)
-
-        input_file.seek(0)
-
-        csv_inputFile = csv.reader(input_file)
-        csv_outputFile = csv.writer(output_file)
-
-        for i, lines in enumerate(csv_inputFile):
-            csv_outputFile.writerow(lines)
-            if i == random_pos:
-                break
-
-def set_board(board):
-
-    with open('cutted_csv.csv', mode='r', newline='') as file:
-        cutted_csv = csv.reader(file)
-        next(cutted_csv, None)
+    return board_best, memory_best
+            
+def get_random_position(board_best, memory_best):
+        length = len(board_best.data.output_data)
+        car_names = board_best.cars.keys()
         
-        for lines in cutted_csv:
-            direction = 0
-            move = int(lines[1]) 
-            if move == 1:
-                direction = 2
-            elif move == -1:
-                direction = 1
-            board.move(lines[0], direction)
-            #save_board(board.cars, board.cars.keys())
+        random_pos = random.randint(0, length - 1)
+
+        # delete saved hashes, boards and moves
+        memory_best.del_hashes(memory_best, random_pos, car_names)
+        del memory_best.saved_boards[random_pos+1:]
+        board_best.data.del_moves(random_pos)     
+
+board_best, memory_best = find_best_random(10)
+board_best.data.export_moves('verbetermij.csv')
+
+get_random_position(board_best, memory_best)
+board_best.data.export_moves('cutted.csv')
+
+random_with_memory(board_best, memory_best)
+board_best.data.export_moves('output.csv')
