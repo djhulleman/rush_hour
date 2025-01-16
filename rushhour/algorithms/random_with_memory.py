@@ -25,11 +25,8 @@ def random_with_memory(board, memory):
             n = comparison_result
             memory.create_board(board, size, n)
 
-            boards_to_remove = memory.saved_boards[n+1:] 
-            for boardt in boards_to_remove:
-                h = memory.hash_board(boardt, car_names)
-                memory.board_hashes.pop(h, None)
-
+            # delete saved hashes, boards and moves
+            memory.del_hashes(memory, n, car_names)
             del memory.saved_boards[n+1:]
             board.data.del_moves(n)
 
@@ -43,6 +40,7 @@ def random_with_memory(board, memory):
             print(f"loading, {s} steps")
 
     if complete:
+        n += 1 # Last step is made inside board.check_finish()
         print(f"Puzzle solved in {n} moves!")
         return board
     else:
