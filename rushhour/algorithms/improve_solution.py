@@ -5,28 +5,31 @@ from rushhour.algorithms.random_with_memory import *
 import csv
 import random
 
-output_file = '../../output.csv'
-size = 6
-game = 1
-file_name = f'../../gameboards/Rushhour{size}x{size}_{game}.csv'
-data = Data()
+def random_position(input_csv):
 
-board = Board(file_name, size, data)
+    with open(input_csv, mode='r') as input_file, open('cutted_csv.csv', mode='w', newline='') as output_file:
+        # Get length of csv file
+        csvFile_list = list(csv.reader(input_file))
+        csv_length = len(csvFile_list)
+        random_pos = random.randint(1, csv_length - 1)
 
-def random_position(output_file):
+        input_file.seek(0)
 
-    with open(output_file, mode='r') as file:
-        csvFile = list(csv.reader(file))
+        csv_inputFile = csv.reader(input_file)
+        csv_outputFile = csv.writer(output_file)
 
-        csv_rows = csvFile[1:]
-        csv_length = len(csv_rows)
-        print(csv_rows)
-        print(csv_length)
+        for i, lines in enumerate(csv_inputFile):
+            csv_outputFile.writerow(lines)
+            if i == random_pos:
+                break
 
-        random_position = random.randint(0, csv_length - 1)
-        del csv_rows[random_position:]
+def set_board(board):
 
-        for i, lines in enumerate(csv_rows):
+    with open('cutted_csv.csv', mode='r', newline='') as file:
+        cutted_csv = csv.reader(file)
+        next(cutted_csv, None)
+        
+        for lines in cutted_csv:
             direction = 0
             move = int(lines[1]) 
             if move == 1:
@@ -34,12 +37,16 @@ def random_position(output_file):
             elif move == -1:
                 direction = 1
             board.move(lines[0], direction)
-            i
-            if i == random_position:
-                break
-        return csv_rows 
+            #save_board(board.cars, board.cars.keys())
 
-csv_rows = random_position(output_file)
-random_with_memory(csv_rows)
-board.print()
+def improve_solution(board, input_csv):
+
+    random_position(input_csv)
+
+    set_board(board)
+
+    random_with_memory(board)
+
+
+
 
