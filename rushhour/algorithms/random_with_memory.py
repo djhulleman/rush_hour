@@ -36,12 +36,12 @@ def random_with_memory(board, memory):
 
         s += 1
         complete = board.check_finish()
-        if s%10000 == 0:
+        if s%50000 == 0:
             print(f"loading, {s} steps")
 
     if complete:
         n += 1 # Last step is made inside board.check_finish()
         print(f"Puzzle solved in {n} moves!")
-        return board
+        return board, n
     else:
         print("Failed to solve the puzzle within the maximum number of iterations.")
