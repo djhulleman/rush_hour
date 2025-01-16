@@ -23,5 +23,5 @@ board.data.export_moves('solutions/output.csv')
 solve_with_visualization(board)
 
 
-solution_file = "output.csv"
+solution_file = "solutions/output.csv"
 plot_solution(board_file, solution_file)
