@@ -4,17 +4,19 @@ from rushhour.algorithms.random_with_memory import *
 import csv
 import random
 
-size = 6
-game = 1
-board_file = f"gameboards/Rushhour{size}x{size}_{game}.csv"
-solution_file = "output.csv"
-# Create data processes
-data = Data()
-memory = Memory()
-# create game board
-board = Board(f'{board_file}', size, data)
+if __name__ == "__main__":
 
-n = random_with_memory(board, memory)
+    size = 6
+    game = 1
+    board_file = f"gameboards/Rushhour{size}x{size}_{game}.csv"
+    solution_file = "output.csv"
+    # Create data processes
+    data = Data()
+    memory = Memory()
+    # create game board
+    board = Board(f'{board_file}', size, data)
+
+    n = random_with_memory(board, memory)
 
 def find_best_path(board, input_csv):
     print()
