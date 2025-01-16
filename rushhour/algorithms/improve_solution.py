@@ -1,9 +1,25 @@
 from rushhour.classes.board import Board
-from rushhour.classes.car import Car
 from rushhour.classes.data import Data
 from rushhour.algorithms.random_with_memory import *
 import csv
 import random
+
+size = 6
+game = 1
+board_file = f"gameboards/Rushhour{size}x{size}_{game}.csv"
+solution_file = "output.csv"
+# Create data processes
+data = Data()
+memory = Memory()
+# create game board
+board = Board(f'{board_file}', size, data)
+
+n = random_with_memory(board, memory)
+
+def find_best_path(board, input_csv):
+    print()
+    
+
 
 def random_position(input_csv):
 
@@ -38,15 +54,3 @@ def set_board(board):
                 direction = 1
             board.move(lines[0], direction)
             #save_board(board.cars, board.cars.keys())
-
-def improve_solution(board, input_csv):
-
-    random_position(input_csv)
-
-    set_board(board)
-
-    random_with_memory(board)
-
-
-
-
