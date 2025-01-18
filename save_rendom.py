@@ -2,29 +2,51 @@ from game import *
 import csv
 from rushhour.classes.data import Data
 from rushhour.classes.board import Board
+from rushhour.algorithms.random_move import *
+from rushhour.algorithms.random_with_memory import *
+from rushhour.algorithms.comparing import *
 
-# select board size and game
-size = 6
-game = 3
 
-amount = []
+def randomly_save(size, game, n):
+    amount = []
+    while len(amount) < n:
+        # Create data process 
+        data = Data()
+        # create game board
+        board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
+        
+        steps = random_solve(board)
+        amount.append([steps])
+        
+    new_file = "rendom_output_test.csv"  
+    with open(new_file, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerows(amount)
 
-while len(amount) < 20000:
-    # Create data process 
-    data = Data()
-    # create game board
-    board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
-    
-    solve(board)
-    data.export_moves()
-    line_count = 0
-    file_name = "output.csv" 
-    with open(file_name, 'r') as file:
-        # Read all lines and count them
-        line_count = sum(1 for line in file) - 1
-    amount.append([line_count])
-    
-new_file = "rendom_output_test.csv"  
-with open(new_file, mode='w', newline='', encoding='utf-8') as file:
-    writer = csv.writer(file)
-    writer.writerows(amount)
+def random_memory_save(size, game, n):
+    amount = []
+    while len(amount) < n:
+        memory = Memory()
+        # Create data process 
+        data = Data()
+        # create game board
+        board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
+        
+        baord, steps = random_with_memory(board, memory)
+        amount.append([steps])
+        
+    new_file = "rendom_with_memory_output_test.csv"  
+    with open(new_file, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerows(amount)
+
+def compairing_save(size, game, n):
+    amount = []
+    while len(amount) < n:
+        steps = run_comparing(size, game)
+        amount.append([steps])
+        
+    new_file = "comparing_output_test.csv"  
+    with open(new_file, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerows(amount)

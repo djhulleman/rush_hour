@@ -8,7 +8,7 @@ class Data:
             ["car", "move"]
         ]
     def save_move(self, car, direction):
-        '''store steps'''   
+        '''store steps when given car opject and direction'''   
         car_name = car.car
 
         if direction == 1:
@@ -28,9 +28,11 @@ class Data:
         print(f"Data is geexporteerd in {file_name}")
         
     def del_moves(self, end):
+        '''deleades moves'''
         del self.output_data[end+1:]
     
     def save_list_moves(self, car_name, direction):
+        '''saves the move given the car name and the direction'''
         if direction == 1:
             self.output_data.append([car_name, "-1"])
         elif direction == 2:
