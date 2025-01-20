@@ -42,7 +42,7 @@ def run_comparing(board_file, size):
         data = Data()
         memory_begin = Memory()
         # make a board
-        board = Board(board_file, size, data)
+        board = Board(board_file, size)
         # make rendomly a path
         finished, amount = random_with_memory(board, memory_begin)
         # save the data

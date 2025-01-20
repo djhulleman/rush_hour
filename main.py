@@ -1,12 +1,6 @@
 from rushhour.classes.board import Board
-from rushhour.classes.data import Data
-from rushhour.visualisation.plot_solutions import plot_solution
-from rushhour.algorithms.random_with_memory import *
-from rushhour.algorithms.random_with_plot import solve_with_visualization
-from rushhour.algorithms.improve_solution import *
-from rushhour.algorithms.comparing import *
-from rushhour.algorithms.save_outputs import *
-
+from rushhour.classes.memory import Memory
+from rushhour.visualisation.UserInterface import *
 
 size = 6
 game = 1
@@ -15,17 +9,9 @@ board_file = f"gameboards/Rushhour{size}x{size}_{game}.csv"
 solution_file = "output.csv"
 
 # Create data processes
-data = Data()
 memory = Memory()
+
 # create game board
-board = Board(f'{board_file}', size, data)
+board = Board(f'{board_file}', size)
 
-random_with_memory(board, memory)
-board.data.export_moves('solutions/output.csv')
-solve_with_visualization(board)
-
-
-solution_file = "solutions/output.csv"
-plot_solution(board_file, solution_file)
-
-run_comparing(size, game)
+visualize_and_solve(board, memory)

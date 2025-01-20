@@ -1,12 +1,13 @@
 import csv
 from rushhour.classes.car import Car
+from rushhour.classes.data import Data
 
 class Board:
     '''create a board opject with the cars on it'''
-    def __init__(self, filename, size, data):
+    def __init__(self, filename, size):
         
         self.size = size
-        self.data = data
+        self.data = Data()
         self.name = filename
         
         # create a self to store the cars in

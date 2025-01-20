@@ -25,7 +25,12 @@ class Memory:
     def compare_boards(self, cars, car_names):
         current_board_copy = {}
         for key, car in cars.items():
-            current_board_copy[key] = (car.row, car.col)
+            if isinstance(car, tuple):
+                # If `cars` contains tuples
+                current_board_copy[key] = car
+            else:
+                # If `cars` contains `Car` objects
+                current_board_copy[key] = (car.row, car.col)
 
         h = self.hash_board(current_board_copy, car_names)
         return self.board_hashes.get(h, None)
