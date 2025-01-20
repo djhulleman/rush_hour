@@ -29,11 +29,8 @@ def compare_files(path1, path2):
     # return the data
     return data
 
-def run_comparing(size, game):
+def run_comparing(board_file, size):
     '''algarithem that finds the best path'''
-    
-    # Create data process 
-    board_file = f'gameboards/Rushhour{size}x{size}_{game}.csv'
     
     '''take random paths'''
     # make empty dict

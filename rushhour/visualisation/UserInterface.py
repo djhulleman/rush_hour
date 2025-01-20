@@ -13,6 +13,7 @@ from rushhour.classes.data import Data
 from rushhour.algorithms.random_move import random_solve
 from rushhour.algorithms.random_with_plot import solve_with_visualization
 from rushhour.algorithms.random_with_memory import random_with_memory
+from rushhour.algorithms.comparing import *
 
 def plot_board(board):
     """Plots the Rush Hour board."""
@@ -159,7 +160,7 @@ def visualize_and_solve(board, memory):
     # Ask for the algorithm
     algorithm = simpledialog.askstring(
         "Select Algorithm",
-        "Enter the solving algorithm: 1 = Random | 2 = Random with plot | 3 = Random with memory",
+        "Enter the solving algorithm: 1 = Random | 2 = Random with plot | 3 = Random with memory | 4 = comparing",
     )
 
     # Solve the puzzle using the chosen algorithm
@@ -172,5 +173,9 @@ def visualize_and_solve(board, memory):
         random_with_memory(board, memory)
         board.data.export_moves("solutions/output.csv")
         plot_solution(begin_state, "solutions/output.csv")
+    elif algorithm == "4":
+        begin_state = copy.deepcopy(board)
+        run_comparing(board.name, board.size)
+        plot_solution(begin_state, "solutions/compair_path.csv")
     else:
         print("Invalid algorithm selected.")

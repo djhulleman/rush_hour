@@ -7,7 +7,7 @@ import random
 
 size = 6
 game = 1
-board_file = f"../../gameboards/Rushhour{size}x{size}_{game}.csv"
+board_file = f"gameboards/Rushhour{size}x{size}_{game}.csv"
 solution_file = "output.csv"
  
 def find_best_random(repetitions):

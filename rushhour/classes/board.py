@@ -7,6 +7,7 @@ class Board:
         
         self.size = size
         self.data = data
+        self.name = filename
         
         # create a self to store the cars in
         self.cars = {}
