@@ -1,13 +1,16 @@
 import csv
 from rushhour.classes.car import Car
 from rushhour.classes.data import Data
+from rushhour.classes.memory import Memory
+
 
 class Board:
     '''create a board opject with the cars on it'''
-    def __init__(self, filename, size):
-        
+    def __init__(self, filename, size, data = None):
+        if data == None:
+            data = Data()
         self.size = size
-        self.data = Data()
+        self.data = data
         self.name = filename
         
         # create a self to store the cars in
@@ -199,3 +202,4 @@ class Board:
                     self.data.save_move(car, direction)
             else:
                 print("FOUT") 
+            
