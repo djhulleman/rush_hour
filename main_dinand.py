@@ -1,6 +1,7 @@
 from rushhour.classes.board import Board
 from rushhour.classes.memory import Memory
 from rushhour.visualisation.UserInterface import *
+from rushhour.algorithms.IDS import *
 
 size = 6
 game = 1
@@ -14,4 +15,6 @@ memory = Memory()
 # create game board
 board = Board(f'{board_file}', size)
 
-visualize_and_solve(board, memory)
+
+solution = IDS(board)
+solution.print()
