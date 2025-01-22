@@ -1,7 +1,8 @@
 from rushhour.classes.board import Board
 from rushhour.classes.memory import Memory
 from rushhour.visualisation.UserInterface import *
-from rushhour.algorithms.IDS import *
+from rushhour.algorithms.Astar import *
+from copy import deepcopy
 
 size = 6
 game = 1
@@ -12,9 +13,10 @@ solution_file = "output.csv"
 # Create data processes
 memory = Memory()
 
-# create game board
 board = Board(f'{board_file}', size)
+start = deepcopy(board)
+solution = A_Star(board)
+board.print()
 
+plot_solution(start, "solutions/output.csv")
 
-solution = IDS(board)
-solution.print()

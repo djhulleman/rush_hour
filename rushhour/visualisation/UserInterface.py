@@ -107,7 +107,7 @@ def draw_board_dynamic(board, ax, car_colors):
     ax.tick_params(left=False, bottom=False)
     ax.set_frame_on(False)
     # Pause to make the animation smooth
-    plt.pause(0.000001)
+    plt.pause(0.1)
 
 def plot_solution(board, solution_file):
     data = Data()
