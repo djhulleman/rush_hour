@@ -6,8 +6,8 @@ import random
 import copy
 
 
-size = 9
-game = 4
+size = 12
+game = 7
 board_file = f"../../gameboards/Rushhour{size}x{size}_{game}.csv"
 solution_file = "output.csv"
  
@@ -102,7 +102,7 @@ def random_with_memory_for_hill(board, memory, random_pos, n_best):
             board.data.del_moves(reverse_index)
             retry += 1
         
-        if retry > 500:
+        if retry > 200:
             n = float('inf')
             print(f'no shorter solution found from cut')
             return board, n
@@ -135,8 +135,8 @@ def improve_solution():
 
         if n < n_best:
             n_best = n 
-            board_best = copy.deepcopy(board)
-            memory_best = copy.deepcopy(memory)
+            board_best = board
+            memory_best = memory
             
             print(f'shorter solution found, {n_best}')
             board_best.data.export_moves('output.csv')
