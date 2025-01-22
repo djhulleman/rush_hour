@@ -44,6 +44,8 @@ def A_Star(board, heuristic_type=0):
                     h = blocking_cars_heuristic(child)  # Heuristic estimate
                 if heuristic_type == 1:
                     h = moves_needed_heuristic(child) # Heuristic estimate
+                if heuristic_type == 2:
+                    h = tiered_blocking_heuristic(child)
                 heapq.heappush(queue, (g + h, next(counter), child))
 
     # If no solution is found
@@ -113,6 +115,68 @@ def moves_needed_heuristic(board):
 
     return total_moves
 
+def tiered_blocking_heuristic(board):
+    """
+    Heuristic function that calculates the cost based on:
+    1. First-tier blocking cars: cars directly blocking the X car's path.
+    2. Second-tier blocking cars: cars that block the first-tier blocking cars.
+    """
+    x_car = board.cars['X']
+    first_tier_blocks = 0
+    second_tier_blocks = 0
+    exit_col = board.size  # Assume the X car exits at the far right
+
+    # Identify first-tier blocking cars
+    for col in range(x_car.col + x_car.length - 1, exit_col):
+        blocking_car = board.board[x_car.row - 1][col]  # Get the cell content
+        if blocking_car != '_':  # Found a blocking car
+            blocking_car_id = blocking_car.car  # Get the car ID (e.g., 'A')
+            first_tier_blocks += 1
+
+            # Ensure the blocking car exists in the board.cars dictionary
+            blocking_car_obj = board.cars[blocking_car_id]
+
+            # Check if this blocking car is itself blocked
+            if blocking_car_obj.orientation == "H":
+                # Horizontal blocking car: check left and right for obstacles
+                left_block = (
+                    board.board[blocking_car_obj.row - 1][blocking_car_obj.col - 2]
+                    if blocking_car_obj.col > 1
+                    else '_'
+                )
+                right_block = (
+                    board.board[blocking_car_obj.row - 1][blocking_car_obj.col + blocking_car_obj.length - 1]
+                    if blocking_car_obj.col + blocking_car_obj.length <= board.size
+                    else '_'
+                )
+                if left_block != '_':
+                    second_tier_blocks += 1
+                if right_block != '_':
+                    second_tier_blocks += 1
+
+            elif blocking_car_obj.orientation == "V":
+                # Vertical blocking car: check up and down for obstacles
+                up_block = (
+                    board.board[blocking_car_obj.row - 2][blocking_car_obj.col - 1]
+                    if blocking_car_obj.row > 1
+                    else '_'
+                )
+                down_block = (
+                    board.board[blocking_car_obj.row + blocking_car_obj.length - 1][blocking_car_obj.col - 1]
+                    if blocking_car_obj.row + blocking_car_obj.length <= board.size
+                    else '_'
+                )
+                if up_block != '_':
+                    second_tier_blocks += 1
+                if down_block != '_':
+                    second_tier_blocks += 1
+
+    # Weight the two tiers of blocking
+    first_tier_weight = 5  # Weight for first-tier blocking
+    second_tier_weight = 2  # Weight for second-tier blocking
+
+    # Calculate the total heuristic cost
+    return first_tier_blocks * first_tier_weight + second_tier_blocks * second_tier_weight
 
 
 def hash_board_state(board):
@@ -120,7 +184,6 @@ def hash_board_state(board):
     for car in board.cars.values():
         hash_value = hash_value * 31 + (car.row * board.size + car.col)
     return hash_value
-
 
 
 def generate_children(board):

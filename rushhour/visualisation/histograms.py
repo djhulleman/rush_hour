@@ -6,10 +6,8 @@ import pandas as pd
 file_path = 'baseline/rendom_output_7.csv'
 data = pd.read_csv(file_path)
 
-# Check the data (optional)
-
 # Step 2: Create a histogram
-plt.hist(data['values'], bins=20, color='blue', edgecolor='black')
+plt.hist(data, bins=30, color='blue', edgecolor='black')
 
 # Step 3: Customize the plot
 plt.title('Histogram of Values')

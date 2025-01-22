@@ -14,13 +14,12 @@ from rushhour.algorithms.random_move import random_solve
 from rushhour.algorithms.random_with_plot import solve_with_visualization
 from rushhour.algorithms.random_with_memory import random_with_memory
 from rushhour.algorithms.comparing import *
-from rushhour.algorithms.random_with_backtracking import *
-from rushhour.algorithms.random_with_memory_and_backtracking import *
+from rushhour.algorithms.Astar import *
 
 
 def plot_board(board):
     """Plots the Rush Hour board."""
-    fig, ax = plt.subplots(figsize=(6, 6))
+    fig, ax = plt.subplots(figsize=(12, 12))
     ax.set_xlim(0, board.size)
     ax.set_ylim(0, board.size)
     ax.set_aspect('equal')
@@ -107,7 +106,7 @@ def draw_board_dynamic(board, ax, car_colors):
     ax.tick_params(left=False, bottom=False)
     ax.set_frame_on(False)
     # Pause to make the animation smooth
-    plt.pause(0.1)
+    plt.pause(0.0001)
 
 def plot_solution(board, solution_file):
     data = Data()
@@ -163,7 +162,7 @@ def visualize_and_solve(board, memory):
     # Ask for the algorithm
     algorithm = simpledialog.askstring(
         "Select Algorithm",
-        "Enter the solving algorithm: 1 = Random | 2 = Random with plot | 3 = Random with memory | 4 = comparing | 5 = Random with backtracking | 6 = Random with memory & backtracking",
+        "Enter the solving algorithm: 1 = Random | 2 = Random with plot | 3 = Random with memory | 4 = comparing | 5 = A*",
     )
 
     # Solve the puzzle using the chosen algorithm
@@ -181,13 +180,11 @@ def visualize_and_solve(board, memory):
         run_comparing(board.name, board.size)
         plot_solution(begin_state, "solutions/compair_path.csv")
     elif algorithm == "5":
-        begin_state = copy.deepcopy(board)
-        random_with_backtracking(begin_state, memory)
+        heuristic = simpledialog.askstring(
+        "Select Heuristic",
+        "Enter the solving algorithm: 0 = blocking_cars_heuristic | 1 = moves_needed_heuristic | 2 = two_tiered_blocking_heuristic",
+        )
+        A_Star(board, int(heuristic))
         plot_solution(board, "solutions/output.csv")
-    elif algorithm == "6":
-        begin_state = copy.deepcopy(board)
-        random_with_memory_and_backtracking(begin_state, memory)
-        plot_solution(board, "solutions/output.csv")
-    
     else:
         print("Invalid algorithm selected.")
