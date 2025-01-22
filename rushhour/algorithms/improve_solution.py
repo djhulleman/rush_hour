@@ -20,7 +20,7 @@ def find_best_random(repetitions):
         memory = Memory()
         board = Board(f'{board_file}', size, data = data_o)
 
-        board, t, _ = random_with_memory(board, memory)
+        _, t, board = random_with_memory(board, memory)
         if t < n:
             memory_best = copy.deepcopy(memory)
             board_best = copy.deepcopy(board)
