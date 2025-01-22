@@ -1,6 +1,8 @@
 from rushhour.classes.board import Board
 from rushhour.classes.memory import Memory
 from rushhour.visualisation.UserInterface import *
+from rushhour.algorithms.Astar import *
+from copy import deepcopy
 
 size = 6
 game = 1
@@ -11,7 +13,10 @@ solution_file = "output.csv"
 # Create data processes
 memory = Memory()
 
-# create game board
 board = Board(f'{board_file}', size)
+start = deepcopy(board)
 
-visualize_and_solve(board, memory)
+random_with_memory(start, memory)
+
+start.data.export_moves("solutions/output.csv")
+plot_solution(board, "solutions/output.csv")
