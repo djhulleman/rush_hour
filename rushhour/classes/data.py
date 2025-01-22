@@ -36,4 +36,11 @@ class Data:
     
     def save_list_moves(self, car_name, direction):
         '''saves the move given the car name and the direction'''
-        self.output_data.append([car_name, direction])
+        if direction == "-1":
+            self.output_data.append([car_name, "-1"])
+        elif direction == "1":
+            self.output_data.append([car_name, "1"])
+        else:
+            print(f"auto {car_name}, richting {direction}")
+            self.output_data.append(["Fout"])
+            
