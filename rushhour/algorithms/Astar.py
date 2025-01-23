@@ -188,30 +188,43 @@ def hash_board_state(board):
 
 def generate_children(board):
     """
-    Generates all possible next states (children) from the current board state.
+    Generates all possible next states (children) from the current board state,
+    including moves that require multiple steps.
     """
     children = []
     for car in board.cars.values():
         if car.orientation == "H":  # Horizontal car
-            if board.check_move(car.car, 1):  # Check if move left is possible
+            # Try moving left by multiple steps
+            steps = 1
+            while board.check_move(car.car, 1, steps):  # Check if move left is possible for `steps`
                 child_board = copy.deepcopy(board)
-                child_board.move(car.car, 1)
+                child_board.move(car.car, 1, steps)
                 children.append(child_board)
-                
-            if board.check_move(car.car, 2):  # Check if move right is possible
+                steps += 1
+            
+            # Try moving right by multiple steps
+            steps = 1
+            while board.check_move(car.car, 2, steps):  # Check if move right is possible for `steps`
                 child_board = copy.deepcopy(board)
-                child_board.move(car.car, 2)
+                child_board.move(car.car, 2, steps)
                 children.append(child_board)
-        
+                steps += 1
+
         elif car.orientation == "V":  # Vertical car
-            if board.check_move(car.car, 1):  # Check if move up is possible
+            # Try moving up by multiple steps
+            steps = 1
+            while board.check_move(car.car, 1, steps):  # Check if move up is possible for `steps`
                 child_board = copy.deepcopy(board)
-                child_board.move(car.car, 1)
+                child_board.move(car.car, 1, steps)
                 children.append(child_board)
-                
-            if board.check_move(car.car, 2):  # Check if move down is possible
+                steps += 1
+            
+            # Try moving down by multiple steps
+            steps = 1
+            while board.check_move(car.car, 2, steps):  # Check if move down is possible for `steps`
                 child_board = copy.deepcopy(board)
-                child_board.move(car.car, 2)
+                child_board.move(car.car, 2, steps)
                 children.append(child_board)
+                steps += 1
     
     return children

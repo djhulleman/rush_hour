@@ -19,7 +19,7 @@ from rushhour.algorithms.Astar import *
 
 def plot_board(board):
     """Plots the Rush Hour board."""
-    fig, ax = plt.subplots(figsize=(12, 12))
+    fig, ax = plt.subplots(figsize=(6, 6))
     ax.set_xlim(0, board.size)
     ax.set_ylim(0, board.size)
     ax.set_aspect('equal')
@@ -108,7 +108,12 @@ def draw_board_dynamic(board, ax, car_colors):
     # Pause to make the animation smooth
     plt.pause(0.0001)
 
+
 def plot_solution(board, solution_file):
+    """
+    Visualizes the solution for the board by reading a solution file
+    and animating the moves dynamically.
+    """
     data = Data()
     # Initialize the plot
     fig, ax = plt.subplots(figsize=(6, 6))
@@ -130,17 +135,24 @@ def plot_solution(board, solution_file):
             try:
                 car = lines[0]
                 move = int(lines[1])
-                if move == -1:
-                    move = 1
+
+                # Determine the direction and steps
+                if move < 0:
+                    direction = 1  # Left or Up
+                    steps = -move
                 else:
-                    move = 2
+                    direction = 2  # Right or Down
+                    steps = move
+
                 # Check and execute the move
-                if board.check_move(car, move):
-                    board.move(car, move)
-                    print(f"Move {i + 1}: Car {car} moved {'left/up' if move < 0 else 'right/down'}")
+                if board.check_move(car, direction, steps):
+                    board.move(car, direction, steps)
+                    print(f"Move {i + 1}: Car {car} moved {'left/up' if direction == 1 else 'right/down'} by {steps} steps")
+
                     # Update the plot dynamically
                     ax.clear()
                     draw_board_dynamic(board, ax, car_colors)
+                    plt.pause(0.5)  # Pause for animation effect
                 else:
                     print(f"Move {i + 1}: Invalid move for car {car}: {move}")
             except (IndexError, ValueError) as e:
@@ -149,6 +161,33 @@ def plot_solution(board, solution_file):
     # Wait for user input to close the plot
     input("Press Enter to continue...")
     plt.close()
+
+def count_moves(filename):
+    total_moves = 0
+    last_car = None
+    move_block = False  # Track if the current car's move is already counted
+
+    # Open and read the file
+    with open(filename, 'r') as file:
+        reader = csv.reader(file)
+        next(reader)  # Skip the header row
+
+        for row in reader:
+            car, move = row
+            # If the current car is not the same as the last car, reset the move block
+            if car != last_car:
+                move_block = False
+
+            # Count the move only if it's not part of a block for the same car
+            if not move_block:
+                total_moves += 1
+                move_block = True  # Mark the car's moves as counted for the block
+
+            # Update the last car
+            last_car = car
+
+    return total_moves
+
 
 def visualize_and_solve(board, memory):
     """Plots the board and asks the user to choose a solving method."""

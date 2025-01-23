@@ -14,9 +14,8 @@ solution_file = "output.csv"
 memory = Memory()
 
 board = Board(f'{board_file}', size)
-start = deepcopy(board)
+start = deepcopy(board )
 
-random_with_memory(start, memory)
+visualize_and_solve(board, "solutions/output.csv")
 
-start.data.export_moves("solutions/output.csv")
-plot_solution(board, "solutions/output.csv")
+("solutions/output.csv")

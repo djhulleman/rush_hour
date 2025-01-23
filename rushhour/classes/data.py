@@ -8,15 +8,15 @@ class Data:
             ["car", "move"]
         ]
 
-    def save_move(self, car, direction):
+    def save_move(self, car, direction, steps=1):
         '''Store steps when given car object or name and direction'''
-        # handle both car object and car name
+        # Handle both car object and car name
         car_name = car.car if hasattr(car, 'car') else car
 
         if direction == 1:
-            self.output_data.append([car_name, "-1"])
+            self.output_data.append([car_name, -1*steps])
         elif direction == 2:
-            self.output_data.append([car_name, "1"])
+            self.output_data.append([car_name, steps])
         else:
             self.output_data.append(["Fout"])
 
@@ -36,11 +36,4 @@ class Data:
     
     def save_list_moves(self, car_name, direction):
         '''saves the move given the car name and the direction'''
-        if direction == "-1":
-            self.output_data.append([car_name, "-1"])
-        elif direction == "1":
-            self.output_data.append([car_name, "1"])
-        else:
-            print(f"auto {car_name}, richting {direction}")
-            self.output_data.append(["Fout"])
-            
+        self.output_data.append([car_name, direction])

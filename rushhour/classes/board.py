@@ -117,31 +117,6 @@ class Board:
                     print()
                 else:
                     print(' ', end = '')
-    
-    def check_move(self, car, direction):
-        '''check if the requested move is possible
-        in game board'''
-        # Get the car object
-        car = self.cars[car]
-        if car.orientation == "H":
-            # Moving left
-            if direction == 1:
-                if car.col - 2 >= 0 and self.board[car.row - 1][car.col - 2] == '_':
-                    return True
-            # Moving right
-            elif direction == 2:
-                if car.col + car.length - 1 < self.size and self.board[car.row - 1][car.col + car.length - 1] == '_':
-                    return True
-        elif car.orientation == "V":
-            # Moving up
-            if direction == 1:
-                if car.row - 2 >= 0 and self.board[car.row - 2][car.col - 1] == '_':
-                    return True
-                # Moving down
-            elif direction == 2:
-                if car.row + car.length - 1 < self.size and self.board[car.row + car.length - 1][car.col - 1] == '_':
-                    return True
-        return False
         
     def check_finish(board):
         '''check if red car is at the end'''
@@ -151,55 +126,76 @@ class Board:
             board.move('X',2)
             return True
 
-    def move(self, car, direction):
+    def check_move(self, car, direction, steps=1):
+        '''check if the requested move is possible
+        in game board for multiple steps'''
+        # Get the car object
+        car = self.cars[car]
+
+        if car.orientation == "H":  # Horizontal movement
+            if direction == 1:  # Moving left
+                if car.col - 2 - (steps - 1) >= 0:  # Ensure there’s enough space to move
+                    # Check all cells along the left path for empty spaces
+                    return all(self.board[car.row - 1][car.col - 2 - i] == '_' for i in range(steps))
+            elif direction == 2:  # Moving right
+                if car.col + car.length - 1 + (steps - 1) < self.size:  # Ensure there’s enough space to move
+                    # Check all cells along the right path for empty spaces
+                    return all(self.board[car.row - 1][car.col + car.length - 1 + i] == '_' for i in range(steps))
+
+        elif car.orientation == "V":  # Vertical movement
+            if direction == 1:  # Moving up
+                if car.row - 2 - (steps - 1) >= 0:  # Ensure there’s enough space to move
+                    # Check all cells along the upward path for empty spaces
+                    return all(self.board[car.row - 2 - i][car.col - 1] == '_' for i in range(steps))
+            elif direction == 2:  # Moving down
+                if car.row + car.length - 1 + (steps - 1) < self.size:  # Ensure there’s enough space to move
+                    # Check all cells along the downward path for empty spaces
+                    return all(self.board[car.row + car.length - 1 + i][car.col - 1] == '_' for i in range(steps))
+
+        # If none of the conditions are satisfied, the move is not possible
+        return False
+
+        
+    def move(self, car, direction, steps=1):
         '''move car on game board'''
-        # check if the car can move in the given direction
-        if self.check_move(car, direction):
-            car = self.cars[car]
-            if car.orientation == "H":
-                # the X car will be shown different
+        if not self.check_move(car, direction, steps):  # Pass car's name to check_move
+            print("Invalid move")
+            return
+
+        car = self.cars[car]  # Access the Car object after validation
+
+        if car.orientation == "H":
+            for _ in range(steps):  # Move the car step by step
                 if car.car == 'X':
-                    # Moving left
-                    if direction == 1:
+                    if direction == 1:  # Moving left
                         self.board[car.row - 1][car.col - 2] = car
                         self.board[car.row - 1][car.col + car.length - 2] = '_'
-                        # change position and save
                         car.col -= 1
-                        self.data.save_move(car, direction)
-                    # Moving right
-                    if direction == 2:
+                    elif direction == 2:  # Moving right
                         self.board[car.row - 1][car.col - 1] = '_'
                         self.board[car.row - 1][car.col + car.length - 1] = car
                         car.col += 1
-                        self.data.save_move(car, direction)
                 else:
-                    # Moving left
-                    if direction == 1:
+                    if direction == 1:  # Moving left
                         self.board[car.row - 1][car.col - 2] = car
                         self.board[car.row - 1][car.col + car.length - 2] = '_'
-                        # change position and save
                         car.col -= 1
-                        self.data.save_move(car, direction)
-                    # Moving right
-                    if direction == 2:
+                    elif direction == 2:  # Moving right
                         self.board[car.row - 1][car.col - 1] = '_'
                         self.board[car.row - 1][car.col + car.length - 1] = car
                         car.col += 1
-                        self.data.save_move(car, direction)
-            elif car.orientation == "V":
-                # Moving up
-                if direction == 1:
+
+        elif car.orientation == "V":
+            for _ in range(steps):  # Move the car step by step
+                if direction == 1:  # Moving up
                     self.board[car.row - 2][car.col - 1] = car
                     self.board[car.row + car.length - 2][car.col - 1] = '_'
-                    # change position and save
                     car.row -= 1
-                    self.data.save_move(car, direction)
-                # moving down
-                if direction == 2:
+                elif direction == 2:  # Moving down
                     self.board[car.row - 1][car.col - 1] = '_'
                     self.board[car.row + car.length - 1][car.col - 1] = car
                     car.row += 1
-                    self.data.save_move(car, direction)
-            else:
-                print("FOUT") 
-            
+
+        # Save the move as a single action
+        self.data.save_move(car, direction, steps)
+                
