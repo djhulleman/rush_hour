@@ -11,7 +11,7 @@ def bfs_solver(board, memory):
     memory.save_board(board.cars, car_names)
     start_index = len(memory.saved_boards) - 1
 
-    # use a queue of indices intomemory.saved_boards 
+    # use a queue of indices linked to memory.saved_boards 
     queue = deque([start_index])
 
     # keep track of paths:  paths[state_index] = list of moves from start
@@ -73,7 +73,6 @@ def export_solution(solution_moves):
         
     for (car_name, direction) in solution_moves:
         board_correct_path.move(car_name, direction)
-    # Now board.data has recorded all moves automatically.
 
     board_correct_path.move('X',2)
 
