@@ -10,7 +10,7 @@ class Data:
 
     def save_move(self, car, direction):
         '''Store steps when given car object or name and direction'''
-        # Handle both car object and car name
+        # handle both car object and car name
         car_name = car.car if hasattr(car, 'car') else car
 
         if direction == 1:
