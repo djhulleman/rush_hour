@@ -1,6 +1,7 @@
 from collections import deque
 from rushhour.algorithms.shorten_csv import combine_moves
 import csv
+import time
 
 def bfs_solver(board, memory):
     """
@@ -127,12 +128,18 @@ if __name__ == "__main__":
     # For example, load a 6x6 puzzle from a CSV:
     data = Data()
     memory = Memory()
-    size = 6
-    board_file = "../../gameboards/Rushhour6x6_1.csv"  # or "Rushhour6x6_1.csv", etc.
+    size = 9
+    board_file = "../../gameboards/Rushhour9x9_5.csv"  # or "Rushhour6x6_1.csv", etc.
     board = Board(board_file, size, data)
+
+    start_time = time.time()
 
     breadth_first_search(board, memory)
 
+    end_time = time.time()
+    duration = end_time - start_time
+ 
+    print(f'Algorithm took: {duration}')
 
 
   
