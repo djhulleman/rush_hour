@@ -102,7 +102,7 @@ def random_with_memory_for_hill(board, memory, random_pos, n_best):
             board.data.del_moves(reverse_index)
             retry += 1
         
-        if retry > 100:
+        if retry > 200:
             n = float('inf')
             print(f'no shorter solution found from cut')
             return board, n
