@@ -214,4 +214,4 @@ def generate_children(board):
                 child_board.move(car.car, 2)
                 children.append(child_board)
     
-    return children
+    return children 

@@ -16,7 +16,6 @@ memory = Memory()
 board = Board(f'{board_file}', size)
 start = deepcopy(board)
 
-random_with_memory(start, memory)
-
-start.data.export_moves("solutions/output.csv")
+A_Star(start, 1)
 plot_solution(board, "solutions/output.csv")
+count_moves("solutions/output.csv")
