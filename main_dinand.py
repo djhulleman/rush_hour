@@ -16,6 +16,6 @@ memory = Memory()
 board = Board(f'{board_file}', size)
 start = deepcopy(board)
 
-A_Star(start, 1)
+A_Star(start)
 plot_solution(board, "solutions/output.csv")
 count_moves("solutions/output.csv")
