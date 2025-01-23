@@ -26,7 +26,6 @@ def bfs_solver(board, memory):
         # check if game is solved
         if board.check_finish():
             # if solved, return the path of moves
-            print(f"BFS found a solution in {len(paths[current_index])} moves.")
             return paths[current_index]
 
         # check and save all possible single moves from this state
@@ -81,7 +80,9 @@ def export_solution(solution_moves):
     board_correct_path.data.export_moves()
 
 
-def print_solution(board, input_file = 'output.csv'):
+def print_solution(board, n, input_file = 'output.csv'):
+    print(f'solution found in {n} moves\n')
+
     with open(input_file, mode='r') as file:
         input_file = csv.reader(file)
         next(input_file)  # skip the header
@@ -106,9 +107,9 @@ def breadth_first_search(board, memory):
     # export the moves into a csv
     export_solution(solution)
     # shorten the csv list by combining consecutive moves
-    combine_moves()
+    n = combine_moves()
     # print solution in terminal
-    print_solution(board)
+    print_solution(board, n)
 
 if __name__ == "__main__":
  
