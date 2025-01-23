@@ -1,6 +1,6 @@
 import csv
 
-def combine_moves(input_file, output_file):
+def combine_moves(input_file = 'output.csv', output_file = 'output.csv'):
     """
     will shorten a csv output by combining consecutive moves of the same car.
     This makes sure the csv file displays the actual steps neccesary to solve a Rush hour game
@@ -8,9 +8,9 @@ def combine_moves(input_file, output_file):
 
     with open(input_file, mode='r') as file:
         input_file = csv.reader(file)
-        header = next(input_file)  # Read the header
+        header = next(input_file)  # read the header
         
-        # Make sure file has 'car' and 'move' columns
+        # make sure file has 'car' and 'move' columns
         if header != ['car', 'move']:
             raise ValueError("File must have a 'car and 'move' column")
         
@@ -40,11 +40,10 @@ def combine_moves(input_file, output_file):
 
 
 
-    # Write the combined data to the output file
+    # write the combined data to the output file
     with open(output_file, mode='w', newline='') as file:
         output_file = csv.writer(file)
-        output_file.writerow(['car', 'move'])  # Write the header
+        output_file.writerow(['car', 'move'])  # write the header
         output_file.writerows(combined)
 
     print(f"Combine moves saved {output_file}")
-
