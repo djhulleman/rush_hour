@@ -14,8 +14,8 @@ solution_file = "output.csv"
 memory = Memory()
 
 board = Board(f'{board_file}', size)
-start = deepcopy(board)
+start = deepcopy(board )
 
-A_Star(start)
-plot_solution(board, "solutions/output.csv")
-#count_moves("solutions/output.csv")
+visualize_and_solve(board, "solutions/output.csv")
+
+("solutions/output.csv")
