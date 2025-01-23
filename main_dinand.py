@@ -18,4 +18,4 @@ start = deepcopy(board)
 
 A_Star(start)
 plot_solution(board, "solutions/output.csv")
-count_moves("solutions/output.csv")
+#count_moves("solutions/output.csv")
