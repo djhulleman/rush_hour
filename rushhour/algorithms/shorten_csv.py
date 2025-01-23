@@ -23,6 +23,7 @@ def combine_moves(input_file = 'output.csv', output_file = 'output.csv'):
         combined = []
         current_car = moves[0][0]
         current_move = moves[0][1]
+        n = 0
 
         # check for consecutives moves and add up if so, else append and move on
         for i in range(1, len(moves)):
@@ -33,9 +34,11 @@ def combine_moves(input_file = 'output.csv', output_file = 'output.csv'):
                 combined.append([current_car, current_move])
                 current_car = next_car
                 current_move = next_move
+                n += 1
 
         # append last car and move
         combined.append([current_car, current_move])
+        n += 1
 
     # write the combined data to the output file
     with open(output_file, mode='w', newline='') as file:
@@ -44,3 +47,5 @@ def combine_moves(input_file = 'output.csv', output_file = 'output.csv'):
         output_file.writerows(combined)
 
     print(f"Combine moves saved {output_file}")
+
+    return n
