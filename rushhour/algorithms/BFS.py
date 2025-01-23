@@ -32,27 +32,31 @@ def bfs_solver(board, memory):
         for car_name in board.cars:
             # direction = 1 (left/up) or 2 (right/down)
             for direction in [1, 2]:
-                # check if move is valid
-                if board.check_move(car_name, direction):
-                    # if valid, make the move
+                steps_moved = 0
+
+                # move a car as many steps as possible in the chosen direction. Save each step as a state
+                while board.check_move(car_name, direction):
+                    # move car by 1 step in chosen direction
                     board.move(car_name, direction)
+                    steps_moved += 1
 
                     # check if new board state has been visited before
                     existing_index = memory.compare_boards(board.cars, car_names)
                     if existing_index is None:
-                        # it is a new state: save board, enqueue and record path
+                        # its a new state: save board, enqueue and record path
                         memory.save_board(board.cars, car_names)
-                        new_index = len(memory.saved_boards) - 1
+                        new_index = len(memory.saved_boards) -1
 
-                        paths[new_index] = paths[current_index] + [(car_name, direction)]
+                        # new path is old path + new move
+                        paths[new_index] = paths[current_index] + [(car_name, direction)] * steps_moved
                         queue.append(new_index)
-                    else:
-                        # we have already visited this state, skipp this cycle 
-                        pass
-
-                    # 6) undo the move (opposite direction) so we can keep expanding
-                    opposite = 1 if direction == 2 else 2
-                    board.move(car_name, opposite)
+                    # if state already exists in memory, skip cycle
+                    else: pass
+                
+                # undo all car movements so we can explore others states
+                opposite_direction = 1 if direction == 2 else 2
+                for _ in range(steps_moved):
+                    board.move(car_name, opposite_direction)
 
     # if queue is empty, no solution was found
     print("BFS: no solution found.")
@@ -104,9 +108,13 @@ def breadth_first_search(board, memory):
     solution = bfs_solver(board, memory)
 
     # export the moves into a csv
+    print(solution)
+
     export_solution(solution)
+
     # shorten the csv list by combining consecutive moves
     n = combine_moves()
+
     # print solution in terminal
     print_solution(board, n)
 
