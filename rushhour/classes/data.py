@@ -39,7 +39,7 @@ class Data:
         self.output_data.append([car_name, direction])
     
     def count_moves(self):
-        # Start by counting the first element
+        '''counts the unique moves'''
         count = 0
         for i in range(1, len(self.output_data)):
             # Only count when the current item is different from the previous

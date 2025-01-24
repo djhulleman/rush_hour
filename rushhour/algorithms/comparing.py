@@ -12,8 +12,6 @@ def solve_with_memory(board, bool, data = None):
     size = board.size
     car_names = board.cars.keys()
     car_list = list(car_names)
-    save_car = ''
-    save_move = ''
 
     memory.save_board(board.cars, car_names)
         
@@ -34,12 +32,7 @@ def solve_with_memory(board, bool, data = None):
                 comparison_result = memory.compare_boards(board.cars, car_names)
                 memory.save_board(board.cars, car_names)
                 i += 1
-                if save_car == random_car and save_move == random_move:
-                    pass
-                else:
-                    n += 1
-                save_move = random_move
-                save_car = random_car
+                n += 1
                 complete = board.check_finish()
             else:
                 bool = False
@@ -64,16 +57,10 @@ def solve_with_memory(board, bool, data = None):
 
             else: 
                 memory.save_board(board.cars, car_names)
-                if save_car == random_car and save_move == random_move:
-                    pass
-                else:
-                    n += 1
-                save_move = random_move
-                save_car = random_car
             complete = board.check_finish()
 
         if complete:
-            return board.data, n
+            return board.data
 
 
 
@@ -112,8 +99,8 @@ def run_comparing(board_file, size):
         # make a board
         board = Board(board_file, size)
         # make rendomly a path
-        steps, count = solve_with_memory(board, False)
-        make_dict(steps, paths, count)
+        steps = solve_with_memory(board, False)
+        make_dict(steps, paths, steps.count_moves())
         teller += 1
     '''compair rendom paths'''
     # sort the dict
@@ -126,7 +113,7 @@ def run_comparing(board_file, size):
     for path1, path2 in combinations(top_list, 2):
         list_overlap = compare_files(path1[0].output_data, path2[0].output_data)
         # make a dict
-        make_dict(list_overlap, overlap_results)
+        make_dict(list_overlap, overlap_results, list_overlap.count_moves())
     # Get the maximum overlap result
     max_overlap = max(overlap_results.values())
     max_key = next(pair for pair, overlap in overlap_results.items() if overlap == max_overlap)
@@ -141,9 +128,9 @@ def run_comparing(board_file, size):
         data = deepcopy(max_key)
         # use the data with overlapping staps and make a board
         board_overlap = Board(board_file, size)
-        steps, count = solve_with_memory(board_overlap, True, data.output_data)
+        steps = solve_with_memory(board_overlap, True, data.output_data)
         # make a dict
-        make_dict(steps, best_path, count)
+        make_dict(steps, best_path, steps.count_moves())
         N += 1
     '''take the fastes path and make it the output'''
     # find the fastest path
