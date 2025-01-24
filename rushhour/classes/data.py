@@ -37,3 +37,12 @@ class Data:
     def save_list_moves(self, car_name, direction):
         '''saves the move given the car name and the direction'''
         self.output_data.append([car_name, direction])
+    
+    def count_moves(self):
+        # Start by counting the first element
+        count = 0
+        for i in range(1, len(self.output_data)):
+            # Only count when the current item is different from the previous
+            if self.output_data[i] != self.output_data[i - 1]:
+                count += 1
+        return count

@@ -1,19 +1,17 @@
 from rushhour.classes.memory import *
 
-def random_with_memory(board, memory, items = 0):
+def random_with_memory(board, memory):
 
     size = board.size
     car_names = board.cars.keys()
     data = board.data
     car_list = list(car_names)
-    save_car = ''
-    save_move = ''
 
     memory.save_board(board.cars, car_names)
         
     complete = False
-    n = items
-    s = items
+    n = 0
+    s = 0
     max_iterations = 10000000  # Prevent infinite loops
 
     while not complete and n < max_iterations:
@@ -35,21 +33,14 @@ def random_with_memory(board, memory, items = 0):
 
             else: 
                 memory.save_board(board.cars, car_names)
-                if save_car == random_car and save_move == random_move:
-                    pass
-                else:
-                    n += 1
-                save_move = random_move
-                save_car = random_car
-
+            n += 1
             s += 1
             complete = board.check_finish()
             # if s%50000 == 0:
                 # print(f"loading, {s} steps")
 
     if complete:
-        n += 1 # Last step is made inside board.check_finish()
         print(f"Puzzle solved in {n} moves!")
-        return data, n
+        return data
     else:
         print("Failed to solve the puzzle within the maximum number of iterations.")
