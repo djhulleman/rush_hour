@@ -17,6 +17,7 @@ class Comparing:
         self.paths = {}
         self.overlap_results = {}
         self.best_path = {}
+        self.best = 0
     
     def solve_with_memory(self, board, bool, data = None):
         '''solves a game using random staps'''
@@ -33,7 +34,7 @@ class Comparing:
         max_iterations = 10000000
         i = 1
         # when data is given, follow these steps untill empty
-        while bool == True:
+        while bool is True:
             # while data are not done
             if i < len(data):
                 car = data[i][0]
@@ -43,6 +44,7 @@ class Comparing:
                     move = 2
                 else:
                     move = 1
+                i += 1
                 # is stap is possible
                 if board.check_move(car, move):
                     # take the step
@@ -50,7 +52,6 @@ class Comparing:
                     # store board in memory
                     comparison_result = memory.compare_boards(board.cars, car_names)
                     memory.save_board(board.cars, car_names)
-                    i += 1
                     n += 1
                     complete = board.check_finish()
             else:
@@ -144,10 +145,10 @@ class Comparing:
         '''algarithem that finds the best path'''
         # make 50 paths
         self.make_first_pool(50)
-        
+        print("one done")
         # compair the paths and make a top 30
         self.get_highest_compar(30)
-        
+        print("two done")
         # Get the maximum overlap result
         # get the steps amount
         max_overlap = max(self.overlap_results.values())
@@ -156,16 +157,15 @@ class Comparing:
         
         # make 20 new paths
         self.make_second_pool(max_key, 20)
-        
+        print("tree done")
         '''take the fastes path and make it the output'''
         # find the fastest path
         # get the steps
         self.best = min(self.best_path.values())
         # get the joined data
         path = next(pair for pair, overlap in self.best_path.items() if overlap == self.best)
-        # save the output of the best path
-        new_file = "output.csv"
-        path.export_moves(new_file)
+        # return the data of the best path
+        return path
     
     def get_steps(self):
         '''returns the amount of steps made'''
