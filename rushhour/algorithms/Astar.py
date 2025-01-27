@@ -1,12 +1,17 @@
 import heapq
 import copy
 import itertools
-from rushhour.classes.data import Data  # Assuming Data class is in the given location
+from rushhour.classes.data import Data
+from rushhour.classes.memory import Memory
+from rushhour.classes.car import Car
 
 # Create a unique counter for tie-breaking
 counter = itertools.count()
 
-def A_Star(board, heuristic_type=0):
+def A_Star(board, memory, heuristic_type=0):
+    """
+    A* algorithm for solving the Rush Hour puzzle using the Memory class.
+    """
     # Initialize a Data object to store the moves
     data = Data()
     board.data = data  # Link the board's data to this instance
@@ -15,12 +20,18 @@ def A_Star(board, heuristic_type=0):
     queue = []
     heapq.heappush(queue, (0, next(counter), board))
 
-    # Set to track visited states
-    visited = set()
+    # Use the Memory class to track visited states
+    car_names = list(board.cars.keys())  # List of all car names
 
     while queue:
         # Get the board with the lowest cost
         _, _, current_board = heapq.heappop(queue)
+
+        # Save the current board state in memory and check if it's already visited
+        if memory.compare_boards(current_board.cars, car_names) is not None:
+            continue  # Skip already visited states
+
+        memory.save_board(current_board.cars, car_names)  # Save this new state in memory
 
         # Check if we reached the goal
         if current_board.check_finish():
@@ -28,29 +39,95 @@ def A_Star(board, heuristic_type=0):
             current_board.data.export_moves("solutions/output.csv")
             return current_board  # Solution found
 
-        # Hash current board state
-        hash = hash_board_state(current_board)
-        if hash in visited:
-            continue  # Skip already visited states
-
-        visited.add(hash)
-
         # Generate children and add them to the queue
         children = generate_children(current_board)
         for child in children:
-            if hash_board_state(child) not in visited:
+            # Check if the child state is already visited using the Memory class
+            if memory.compare_boards(child.cars, car_names) is None:
                 g = len(current_board.history)  # Cost-so-far
                 if heuristic_type == 0:
                     h = blocking_cars_heuristic(child)  # Heuristic estimate
-                if heuristic_type == 1:
-                    h = moves_needed_heuristic(child) # Heuristic estimate
-                if heuristic_type == 2:
-                    h = tiered_blocking_heuristic(child)
+                elif heuristic_type == 1:
+                    h = moves_needed_heuristic(child)  # Heuristic estimate
+                elif heuristic_type == 2:
+                    h = improved_heuristic(child)  # Heuristic estimate
+                else:
+                    raise ValueError("Invalid heuristic type")
+
+                # Add the child state to the priority queue
                 heapq.heappush(queue, (g + h, next(counter), child))
 
     # If no solution is found
-    print("No solution found.") 
+    print("No solution found.")
     return None
+
+
+def generate_children2(board, memory):
+    """
+    Generates all possible child states (boards) from the given board state.
+    Ensures no duplicate states are added to the memory or children list.
+    Does not use deep copies of the board, instead reverts moves after exploration.
+    """
+    children = []
+    car_names = board.cars.keys()
+
+    for car_name in board.cars:
+        for direction in [1, 2]:
+            steps_moved = 0  # Count how many steps were successfully moved
+
+            while board.check_move(car_name, direction):
+                # Move the car in the specified direction
+                board.move(car_name, direction)
+                steps_moved += 1
+
+                # Check if the current state is new
+                if memory.compare_boards(board.cars, car_names) is None:
+                    memory.save_board(board.cars, car_name)  # Save the new state
+                    children.append(copy.deepcopy(board))  # Add to children
+
+            # Revert the car to its original position
+            opposite_direction = 1 if direction == 2 else 2
+            for _ in range(steps_moved):
+                board.move(car_name, opposite_direction)
+
+    return children
+
+
+def generate_children(board):
+    """
+    Generates all possible next states (children) from the current board state,
+    including moves that require multiple steps.
+    """
+    children = []
+    for car in board.cars.values():
+        if car.orientation == "H":
+            steps = 1
+            while board.check_move(car.car, 1, steps):
+                child_board = copy.deepcopy(board)
+                child_board.move(car.car, 1, steps)
+                children.append(child_board)
+                steps += 1
+            steps = 1
+            while board.check_move(car.car, 2, steps):
+                child_board = copy.deepcopy(board)
+                child_board.move(car.car, 2, steps)
+                children.append(child_board)
+                steps += 1
+        elif car.orientation == "V":
+            steps = 1
+            while board.check_move(car.car, 1, steps):
+                child_board = copy.deepcopy(board)
+                child_board.move(car.car, 1, steps)
+                children.append(child_board)
+                steps += 1
+            steps = 1
+            while board.check_move(car.car, 2, steps):
+                child_board = copy.deepcopy(board)
+                child_board.move(car.car, 2, steps)
+                children.append(child_board)
+                steps += 1
+    return children
+
 
 def blocking_cars_heuristic(board):
     """
@@ -81,150 +158,45 @@ def moves_needed_heuristic(board):
         # If there's a car blocking the path
         blocking_car = board.board[x_car.row - 1][col]
         if blocking_car != '_':
-            # Calculate moves needed to get the blocking car out of the way
-            if blocking_car.orientation == "H":
-                # Horizontal cars can only move left or right
-                # Calculate minimum moves to clear the path
-                moves_left = blocking_car.col - 1  # Spaces to the left edge
-                moves_right = board.size - (blocking_car.col + blocking_car.length - 1)  # Spaces to the right edge
+            blocking_car_obj = board.cars[blocking_car]
+            if blocking_car_obj.orientation == "H":
+                moves_left = blocking_car_obj.col - 1
+                moves_right = board.size - (blocking_car_obj.col + blocking_car_obj.length - 1)
                 total_moves += min(moves_left, moves_right)
-            elif blocking_car.orientation == "V":
-                # Vertical cars can only move up or down
-                # Calculate minimum moves to clear the path
-                moves_up = blocking_car.row - 1  # Spaces to the top edge
-                moves_down = board.size - (blocking_car.row + blocking_car.length - 1)  # Spaces to the bottom edge
+            elif blocking_car_obj.orientation == "V":
+                moves_up = blocking_car_obj.row - 1
+                moves_down = board.size - (blocking_car_obj.row + blocking_car_obj.length - 1)
                 total_moves += min(moves_up, moves_down)
-
-    # Check other cars that may not block directly but need to be repositioned
-    for car in board.cars.values():
-        if car.car == 'X':
-            continue  # Skip the X car
-        # Evaluate if the car is in a position that obstructs movement
-        if car.orientation == "H":
-            # Horizontal cars: check if they overlap with the row of the "X" car
-            if car.row == x_car.row:
-                moves_left = car.col - 1
-                moves_right = board.size - (car.col + car.length - 1)
-                total_moves += min(moves_left, moves_right)
-        elif car.orientation == "V":
-            # Vertical cars: check if they block columns that need clearing
-            if x_car.col <= car.col <= target_col:
-                moves_up = car.row - 1
-                moves_down = board.size - (car.row + car.length - 1)
-                total_moves += min(moves_up, moves_down)
-
     return total_moves
 
-def tiered_blocking_heuristic(board):
+
+def improved_heuristic(board):
     """
-    Heuristic function that calculates the cost based on:
-    1. First-tier blocking cars: cars directly blocking the X car's path.
-    2. Second-tier blocking cars: cars that block the first-tier blocking cars.
+    An improved heuristic to estimate the cost to solve the puzzle.
+    Calculates the number of blocking cars and the cost to move them.
     """
     x_car = board.cars['X']
-    first_tier_blocks = 0
-    second_tier_blocks = 0
-    exit_col = board.size  # Assume the X car exits at the far right
+    blocking_cost = 0
 
-    # Identify first-tier blocking cars
-    for col in range(x_car.col + x_car.length - 1, exit_col):
-        blocking_car = board.board[x_car.row - 1][col]  # Get the cell content
+    # Check all cars directly blocking the X car
+    for col in range(x_car.col + x_car.length - 1, board.size):
+        blocking_car = board.board[x_car.row - 1][col]
         if blocking_car != '_':  # Found a blocking car
-            blocking_car_id = blocking_car.car  # Get the car ID (e.g., 'A')
-            first_tier_blocks += 1
+            if isinstance(blocking_car, str):
+                blocking_car_obj = board.cars[blocking_car]
+            elif isinstance(blocking_car, Car):
+                blocking_car_obj = blocking_car
+            else:
+                continue  # Skip empty or invalid cells
 
-            # Ensure the blocking car exists in the board.cars dictionary
-            blocking_car_obj = board.cars[blocking_car_id]
+            # Calculate the cost to move the blocking car out of the way
+            if blocking_car_obj.orientation == 'H':
+                blocking_cost += (blocking_car_obj.col + blocking_car_obj.length - 1 - col)
+            elif blocking_car_obj.orientation == 'V':
+                blocking_cost += (blocking_car_obj.row + blocking_car_obj.length - 1 - x_car.row)
 
-            # Check if this blocking car is itself blocked
-            if blocking_car_obj.orientation == "H":
-                # Horizontal blocking car: check left and right for obstacles
-                left_block = (
-                    board.board[blocking_car_obj.row - 1][blocking_car_obj.col - 2]
-                    if blocking_car_obj.col > 1
-                    else '_'
-                )
-                right_block = (
-                    board.board[blocking_car_obj.row - 1][blocking_car_obj.col + blocking_car_obj.length - 1]
-                    if blocking_car_obj.col + blocking_car_obj.length <= board.size
-                    else '_'
-                )
-                if left_block != '_':
-                    second_tier_blocks += 1
-                if right_block != '_':
-                    second_tier_blocks += 1
-
-            elif blocking_car_obj.orientation == "V":
-                # Vertical blocking car: check up and down for obstacles
-                up_block = (
-                    board.board[blocking_car_obj.row - 2][blocking_car_obj.col - 1]
-                    if blocking_car_obj.row > 1
-                    else '_'
-                )
-                down_block = (
-                    board.board[blocking_car_obj.row + blocking_car_obj.length - 1][blocking_car_obj.col - 1]
-                    if blocking_car_obj.row + blocking_car_obj.length <= board.size
-                    else '_'
-                )
-                if up_block != '_':
-                    second_tier_blocks += 1
-                if down_block != '_':
-                    second_tier_blocks += 1
-
-    # Weight the two tiers of blocking
-    first_tier_weight = 5  # Weight for first-tier blocking
-    second_tier_weight = 2  # Weight for second-tier blocking
-
-    # Calculate the total heuristic cost
-    return first_tier_blocks * first_tier_weight + second_tier_blocks * second_tier_weight
+    return blocking_cost
 
 
-def hash_board_state(board):
-    hash_value = 0
-    for car in board.cars.values():
-        hash_value = hash_value * 31 + (car.row * board.size + car.col)
-    return hash_value
 
 
-def generate_children(board):
-    """
-    Generates all possible next states (children) from the current board state,
-    including moves that require multiple steps.
-    """
-    children = []
-    for car in board.cars.values():
-        if car.orientation == "H":  # Horizontal car
-            # Try moving left by multiple steps
-            steps = 1
-            while board.check_move(car.car, 1, steps):  # Check if move left is possible for `steps`
-                child_board = copy.deepcopy(board)
-                child_board.move(car.car, 1, steps)
-                children.append(child_board)
-                steps += 1
-            
-            # Try moving right by multiple steps
-            steps = 1
-            while board.check_move(car.car, 2, steps):  # Check if move right is possible for `steps`
-                child_board = copy.deepcopy(board)
-                child_board.move(car.car, 2, steps)
-                children.append(child_board)
-                steps += 1
-
-        elif car.orientation == "V":  # Vertical car
-            # Try moving up by multiple steps
-            steps = 1
-            while board.check_move(car.car, 1, steps):  # Check if move up is possible for `steps`
-                child_board = copy.deepcopy(board)
-                child_board.move(car.car, 1, steps)
-                children.append(child_board)
-                steps += 1
-            
-            # Try moving down by multiple steps
-            steps = 1
-            while board.check_move(car.car, 2, steps):  # Check if move down is possible for `steps`
-                child_board = copy.deepcopy(board)
-                child_board.move(car.car, 2, steps)
-                children.append(child_board)
-                steps += 1
-    
-    return children
