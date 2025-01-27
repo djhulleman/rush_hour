@@ -70,7 +70,76 @@ def A_Star(board, heuristic_type=0):
 
     # If no solution is found
     print("No solution found.")
+    print("No solution found.")
     return None
+
+
+def generate_children2(board, memory):
+    """
+    Generates all possible child states (boards) from the given board state.
+    Ensures no duplicate states are added to the memory or children list.
+    Does not use deep copies of the board, instead reverts moves after exploration.
+    """
+    children = []
+    car_names = board.cars.keys()
+
+    for car_name in board.cars:
+        for direction in [1, 2]:
+            steps_moved = 0  # Count how many steps were successfully moved
+
+            while board.check_move(car_name, direction):
+                # Move the car in the specified direction
+                board.move(car_name, direction)
+                steps_moved += 1
+
+                # Check if the current state is new
+                if memory.compare_boards(board.cars, car_names) is None:
+                    memory.save_board(board.cars, car_name)  # Save the new state
+                    children.append(copy.deepcopy(board))  # Add to children
+
+            # Revert the car to its original position
+            opposite_direction = 1 if direction == 2 else 2
+            for _ in range(steps_moved):
+                board.move(car_name, opposite_direction)
+
+    return children
+
+
+def generate_children(board):
+    """
+    Generates all possible next states (children) from the current board state,
+    including moves that require multiple steps.
+    """
+    children = []
+    for car in board.cars.values():
+        if car.orientation == "H":
+            steps = 1
+            while board.check_move(car.car, 1, steps):
+                child_board = copy.deepcopy(board)
+                child_board.move(car.car, 1, steps)
+                children.append(child_board)
+                steps += 1
+            steps = 1
+            while board.check_move(car.car, 2, steps):
+                child_board = copy.deepcopy(board)
+                child_board.move(car.car, 2, steps)
+                children.append(child_board)
+                steps += 1
+        elif car.orientation == "V":
+            steps = 1
+            while board.check_move(car.car, 1, steps):
+                child_board = copy.deepcopy(board)
+                child_board.move(car.car, 1, steps)
+                children.append(child_board)
+                steps += 1
+            steps = 1
+            while board.check_move(car.car, 2, steps):
+                child_board = copy.deepcopy(board)
+                child_board.move(car.car, 2, steps)
+                children.append(child_board)
+                steps += 1
+    return children
+
 
 def blocking_cars_heuristic(board):
     """
@@ -121,7 +190,8 @@ def moves_needed_heuristic(board):
 
     return total_moves
 
-def tiered_blocking_heuristic(board):
+
+def improved_heuristic(board):
     """
     Heuristic function that calculates the cost based on:
     1. First-tier blocking cars: cars directly blocking X car's path.
