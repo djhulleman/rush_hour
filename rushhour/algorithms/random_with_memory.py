@@ -41,6 +41,6 @@ def random_with_memory(board, memory):
 
     if complete:
         print(f"Puzzle solved in {n} moves!")
-        return data
+        return board, n
     else:
         print("Failed to solve the puzzle within the maximum number of iterations.")
