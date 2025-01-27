@@ -1,4 +1,3 @@
-from game import *
 import csv
 from rushhour.classes.data import Data
 from rushhour.classes.board import Board
@@ -16,9 +15,10 @@ def randomly_save(size, game, n):
         board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
         
         steps = random_solve(board)
-        amount.append([steps])
+        count = steps.data.count_moves()
+        amount.append([count])
         
-    new_file = "rendom_output_test.csv"  
+    new_file = f"baseline/stepcount_game{game}.csv"  
     with open(new_file, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerows(amount)
@@ -55,13 +55,36 @@ def random_memory_save(size, game, n):
         writer = csv.writer(file)
         writer.writerows(amount)
 
-def compairing_save(size, game, n):
+def compairing_save(board_file, size, game, n):
     amount = []
+    count = 0
+    top_count = 0
+    top = ''
+    botom_count = 10000000000000
+    botom = ''
     while len(amount) < n:
-        steps = run_comparing(size, game)
+        # run algorithem
+        compar = Comparing(board_file, size)
+        data = compar.run_comparing()
+        steps = compar.get_steps()
+        print(steps)
+        count += 1
+        print(f'round {count}')
+        # store the steps
         amount.append([steps])
+        if steps > top_count:
+            top_count = steps
+            top = data
+        elif steps < botom_count:
+            botom_count = steps
+            botom = data
         
-    new_file = "comparing_output_test.csv"  
+    top.export_moves(f"solutions/comparing_output/top_game{game}.csv")
+    botom.export_moves(f"solutions/comparing_output/botom_game{game}.csv")
+        
+    new_file = f"solutions/comparing_output/game{game}.csv"  
     with open(new_file, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerows(amount)
+        
+        
