@@ -25,6 +25,11 @@ def randomly_save(size, game, n):
 
 def random_memory_save(size, game, n):
     amount = []
+    top_count = 0
+    top = ''
+    botom_count = 10000000000000
+    botom = ''
+    
     while len(amount) < n:
         memory = Memory()
         # Create data process 
@@ -32,10 +37,20 @@ def random_memory_save(size, game, n):
         # create game board
         board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
         
-        baord, steps = random_with_memory(board, memory)
-        amount.append([steps])
+        board_outcome = random_with_memory(board, memory)
         
-    new_file = "rendom_with_memory_output_test.csv"  
+        amount.append([board_outcome.count_moves()])
+        if board_outcome.count_moves() > top_count:
+            top_count = board_outcome.count_moves()
+            top = board_outcome
+        elif board_outcome.count_moves() < botom_count:
+            botom_count = board_outcome.count_moves()
+            botom = board_outcome
+        
+    top.export_moves(f"solutions/random_with_memory/top_game{game}.csv")
+    botom.export_moves(f"solutions/random_with_memory/botom_game{game}.csv")
+        
+    new_file = f"solutions/random_with_memory/game{game}.csv"  
     with open(new_file, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerows(amount)
