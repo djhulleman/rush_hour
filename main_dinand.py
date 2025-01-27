@@ -2,11 +2,11 @@ from rushhour.classes.board import Board
 from rushhour.classes.memory import Memory
 from rushhour.visualisation.UserInterface import *
 from rushhour.algorithms.Astar import *
-#from rushhour.algorithms.BFS import *
+from rushhour.visualisation.statespace import *
 from copy import deepcopy
 
-size = 6
-game = 1
+size = 9
+game = 4
 
 board_file = f"gameboards/Rushhour{size}x{size}_{game}.csv"
 solution_file = "output.csv"
@@ -18,5 +18,4 @@ board = Board(f'{board_file}', size)
 start = deepcopy(board )
 
 
-A_Star(board, memory)
-
+calculate_statespace(board_file, 9)

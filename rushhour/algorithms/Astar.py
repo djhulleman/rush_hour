@@ -63,7 +63,7 @@ def A_Star(board, heuristic_type=0):
                 elif heuristic_type == 1:
                     h = moves_needed_heuristic(child)
                 else:  # heuristic_type == 2
-                    h = tiered_blocking_heuristic(child)
+                    h = improved_heuristic(child)
 
                 # f = g + h
                 heapq.heappush(queue, (child_g + h, next(counter), child))
