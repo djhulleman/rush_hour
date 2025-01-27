@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import random
 import csv
 
-from rushhour.visualisation.dynamic_board_draw import draw_board_dynamic
+from rushhour.visualisation.UserInterface import draw_board_dynamic
 from rushhour.classes.board import Board
 from rushhour.classes.data import Data
 

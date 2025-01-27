@@ -50,11 +50,19 @@ def calculate_statespace(board, size):
         t = trucks[i]    # Trucks in the row/column
         row_states.append(row_permutations(size, a, t))  # Calculate permutations for this row/column
     
-    print("Row/Column States:", row_states)
-    print("Total Statespace:", np.prod(row_states))  
+    print("New Statespace:", np.prod(row_states))  
 
+
+def calculate_old_statespace(board, size):
+    cars, trucks = load_board(board, size)
+    a = sum(cars)
+    t = sum(trucks)
+
+    print("Old Statespace:", ((size-1)**a)*((size-2)**t))  
 
 # Voorbeeld gebruik
 if __name__ == '__main__':
     # Inladen van het bordbestand
-    calculate_statespace("gameboards/Rushhour6x6_1.csv", 6)
+    calculate_statespace("gameboards/Rushhour12x12_7.csv", 12)
+    calculate_old_statespace("gameboards/Rushhour9x9_4.csv", 9)
+    
