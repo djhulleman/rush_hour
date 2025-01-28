@@ -7,12 +7,10 @@ import random
 import copy
 import time
 
-solution_file = "output.csv"
-
 def find_best_random(size, game, repetitions):
     """
     Function for finding a solution using the random_with_memory algorithm.
-    Based on repetitions, function will run random_with_memory multiple times 
+    Based on repetitions, function might run random_with_memory multiple times 
     and return the best solution
     """
 
@@ -157,15 +155,14 @@ def hillclimber(size, game):
     
     # get initial board from random_with_memory algorithm
     board_best, memory_best, n_best = find_best_random(size, game, 1)
-    board_best.data.export_moves('verbetermij.csv')
+    board_best.data.export_moves('solutions/Hillclimber/original_solution.csv')
 
-    max_no_solution = 100
-    no_solution = 0
-    start_time_seconds = time.time()
-    run_time = 0
+    start_time_seconds = time.time()    # start time in seconds
+    run_time = 0                        # initialize run_time variabel
+    max_runtime = 5400                  # set max run time for hillclimber algorithm. 5400 seconds = 90 min
 
-    # loop until the runtime exceeds limit
-    while run_time < 5400:
+    # loop until the run time exceeds limit
+    while run_time < max_runtime:
 
         # copy best board and memory states
         board = copy.deepcopy(board_best)
@@ -174,11 +171,6 @@ def hillclimber(size, game):
         # get a random position and attempt to improve the solution
         random_pos = get_random_position(board, memory)
         board, n = random_with_memory_for_hill(board, memory, random_pos, n_best)
-
-        if board == False:
-            no_solution += 1
-        else: 
-            no_solution = 0
 
         # check if a shorter solution is found
         if n < n_best:
@@ -193,27 +185,11 @@ def hillclimber(size, game):
             current_time_seconds = time.time()
             run_time = current_time_seconds - start_time_seconds
             
-            print(f'shorter solution found, {n_best}:   ', current_time.strftime("%H:%M:%S"), run_time)
-            board_best.data.export_moves('output.csv')
+            print(f'shorter solution found, {n_best}.   Time = ', run_time)
+            board_best.data.export_moves('solutions/Hillclimber/output.csv')
 
-        # track time
+        # track run time
         current_time_seconds =  time.time()
         run_time = current_time_seconds - start_time_seconds
 
     return board_best
-
-
-if __name__ == "__main__":
-
-    i = 0
-    size = 9
-    game = 5
-
-    while True:
-
-        board_best = hillclimber(size, game)
-
-        board_best.data.export_moves(f'output{i}.csv')
-        print("\n")
-
-        i += 1
