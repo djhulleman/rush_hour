@@ -121,8 +121,9 @@ def visualize_and_solve(board, memory):
             root.destroy()
         elif algorithm == "4":
             begin_state = copy.deepcopy(board)
-            
-            run_comparing(board.name, board.size)
+            compare = Comparing(board.name, board.size)
+            outcome = compare.run_comparing()
+            outcome.export_moves("solutions/compair_path.csv")
             plot_solution(begin_state, "solutions/compair_path.csv")
             root.destroy()
         elif algorithm == "5":
