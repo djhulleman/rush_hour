@@ -86,6 +86,8 @@ class Comparing:
 
             if complete:
                 # return the stap data
+                # to prevent memory overflow, empty memory
+                memory.crear()
                 return board.data
             
     def compare_files(self, path1, path2):
@@ -127,6 +129,7 @@ class Comparing:
             list_overlap = self.compare_files(path1[0].output_data, path2[0].output_data)
             # store path and steps
             self.overlap_results[list_overlap] = list_overlap.count_moves()
+        self.paths.clear()
 
     def make_second_pool(self, overlap_data, n):
         '''do random n times and save path'''
@@ -145,10 +148,8 @@ class Comparing:
         '''algarithem that finds the best path'''
         # make 50 paths
         self.make_first_pool(50)
-        print("one done")
         # compair the paths and make a top 30
         self.get_highest_compar(30)
-        print("two done")
         # Get the maximum overlap result
         # get the steps amount
         max_overlap = max(self.overlap_results.values())
