@@ -2,18 +2,16 @@ import heapq
 import copy
 import itertools
 from rushhour.classes.data import Data
-from rushhour.classes.memory import Memory
-from rushhour.classes.board import Board
-import logging
-
 
 # Create a unique counter for tie-breaking in the priority queue
 counter = itertools.count()
 
-def A_Star(board):
+def A_Star(board, heuristic_type=0):
     """
     Runs an A* search on the given Rush Hour board.
     heuristic_type = 0 -> blocking_cars_heuristic
+    heuristic_type = 1 -> moves_needed_heuristic
+    heuristic_type = 2 -> tiered_blocking_heuristic
     """
     # Initialize a Data object to store the moves
     data = Data()
@@ -60,6 +58,7 @@ def A_Star(board):
             # If we've never seen this child or we found a cheaper way to reach it
             if child_hash not in visited or child_g < visited[child_hash]:
                 # Choose the heuristic based on user selection
+
                 h = blocking_cars_heuristic(child)
 
                 # f = g + h
@@ -71,37 +70,28 @@ def A_Star(board):
 
 
 def blocking_cars_heuristic(board):
+    """
+    Heuristic function to estimate the cost to reach the goal.
+    Measures the number of cars blocking the path of the X car.
+    """
     x_car = board.cars['X']
-
-    # If row is a string, convert it to an integer (for example, 'A' -> 0, 'B' -> 1)
-    if isinstance(x_car.row, str):
-        x_car.row = ord(x_car.row.upper()) - ord('A')
-    
-    # Debugging logs
-    logging.debug(f"x_car.row: {x_car.row}, x_car.col: {x_car.col}, board.size: {board.size}")
-    
-    if not (0 <= x_car.row < board.size):
-        raise ValueError(f"Row index {x_car.row} is out of bounds. Board size: {board.size}")
-
     blocks = 0
     for col in range(x_car.col + x_car.length - 1, board.size):
-        logging.debug(f"Checking position: ({x_car.row}, {col})")
-        
-        # Check if column index is within bounds
-        if col >= board.size:
-            break
-        if board.board[x_car.row][col] != '_':  # Blocking cars
+        if board.board[x_car.row - 1][col] != '_':  # Blocking cars
             blocks += 1
     return blocks
 
 
 def hash_board_state(board):
     """
-    Generate a unique hash of the board state by considering all car positions.
+    Returns a hashable integer for the board's state,
+    based on each car's (row, col) position.
     """
-    return tuple((car.car, car.row, car.col) for car in board.cars.values())
-
-
+    hash_value = 0
+    for car in board.cars.values():
+        # Combine row & col into a single integer
+        hash_value = hash_value * 31 + (car.row * board.size + car.col)
+    return hash_value
 
 def generate_children(board):
     """

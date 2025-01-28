@@ -126,9 +126,8 @@ def visualize_and_solve(board, memory):
             plot_solution(begin_state, "solutions/compair_path.csv")
             root.destroy()
         elif algorithm == "5":
-            def run_a_star():
-                A_Star(board)
-                plot_solution(board, "solutions/output.csv")
+            A_Star(board)
+            plot_solution(board, "solutions/output.csv")
         elif algorithm == "6":
             load_solution_file()  # Open file selection for existing solution
             root.destroy()
