@@ -8,6 +8,7 @@ from rushhour.algorithms.BFS import breadth_first_search
 from rushhour.algorithms.hillclimber import hillclimber
 from rushhour.algorithms.Astar import A_Star
 import time
+import os
 
 """
 This script contains functions for running experiments per algorithm.
@@ -125,22 +126,40 @@ def compairing_experiment(board_file, size, game, n):
         writer = csv.writer(file)
         writer.writerows(amount)
 
-def hillclimber_experiment():
+def hillclimber_experiment(size, game):
     """
     Continuesly runs the hillclimber algorithm for a given period.
+    - solution and their time are printed in the terminal
     - each cycle the best solution is exported to a file "output{i}.csv"
     """
-    i = 0
+    i = 0                       # counts each time a new hillclimber cycle is started
+    run_time = 0                # initialize run_time variable 
+    start_time = time.time()    # save start time of algorithm
+    max_runtime = 36000        # 36000 seconds = 10 hour
 
-    while True:
+    while run_time < max_runtime :
         # run  hillclimber algorithm
-        board_best = hillclimber()
+        board_best = hillclimber(size, game)
 
         # export best solution to csv file
-        board_best.data.export_moves(f'output{i}.csv')
+        board_best.data.export_moves(f'solutions/Hillclimber/output{i}.csv')
         print("\n")
 
         i += 1
+
+        # calculate run time
+        current_time = time.time()
+        run_time = current_time - start_time
+
+    # delete unneseccary files when conducting experiment
+    file_path1 = "solutions/Hillclimber/output.csv"
+    file_path2 = "solutions/Hillclimber/original_solution.csv"
+
+    if os.path.exists(file_path1):
+        os.remove(file_path1)
+    if os.path.exists(file_path2):
+        os.remove(file_path2)
+
 
 def BFS_experiment(size, game):
     """
