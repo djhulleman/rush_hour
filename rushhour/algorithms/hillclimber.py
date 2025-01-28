@@ -16,7 +16,7 @@ def find_best_random(size, game, repetitions):
     and return the best solution
     """
 
-    board_file = f"../../gameboards/Rushhour{size}x{size}_{game}.csv"
+    board_file = f"gameboards/Rushhour{size}x{size}_{game}.csv"
 
     i = 0 # counter for iterations
     n = float('inf') # set best solution as infinity 
