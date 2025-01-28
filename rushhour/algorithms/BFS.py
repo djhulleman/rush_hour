@@ -83,7 +83,7 @@ def export_solution(solution_moves):
 
     board_correct_path.move('X',2)
 
-    board_correct_path.data.export_moves()
+    board_correct_path.data.export_moves("solutions/output.csv")
 
 
 def print_solution(board, n, input_file = 'output.csv'):
