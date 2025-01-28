@@ -138,7 +138,7 @@ def visualize_and_solve(board, memory):
             plot_solution(start, "solutions/output.csv")
 
         elif algorithm == "8":
-            improve_solution()
+            hillclimber(board.size, board.name[-5])
         else:
             messagebox.showerror("Error", "Invalid algorithm selected.")
 
