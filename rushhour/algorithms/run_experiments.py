@@ -49,7 +49,7 @@ def random_with_memory_experiment(size, game, n):
     """
     Runs the random_with_memory algorithm n times for the specified board size and game.
     - exports the best and worst solution to "solutions/random_with_memory"
-    - exports the step count data for all runds to a csv file.
+    - exports the step count data for all runds to "solutions/random_with_memory".
     """
     amount = []
     top_count = 0
@@ -90,7 +90,7 @@ def compairing_experiment(board_file, size, game, n):
     """
     Runs the comparing algorithm n times and tracks the performace.
     - exports the best and worst solutions to "solutions/comparing_output".
-    - exports step count data for all runs to a csv fole.
+    - exports step count data for all runs to "solutions/comparing_output".
     """
     amount = []
     count = 0
@@ -130,7 +130,7 @@ def hillclimber_experiment(size, game):
     """
     Continuesly runs the hillclimber algorithm for a given period.
     - solution and their time are printed in the terminal
-    - each cycle the best solution is exported to a file "output{i}.csv"
+    - each cycle the best solution is exported as "solutions/Hillclimber/output{i}.csv"
     """
     i = 0                       # counts each time a new hillclimber cycle is started
     run_time = 0                # initialize run_time variable 
@@ -161,20 +161,16 @@ def hillclimber_experiment(size, game):
         os.remove(file_path2)
 
 
-def BFS_experiment(size, game):
+def BFS_experiment(board, memory, board_file):
     """
     Runs the Breath-First-Search (BFS.py) algrithm and measures the run time.
-    - exports the best solution 
+    - exports the best solution to "solutions/breadth-first-search/output.csv" 
     - prints the time taken to find the best solution
     """
 
-    data = Data()
-    memory = Memory()
-    board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
-
     start_time = time.time()
 
-    breadth_first_search(board, memory)
+    breadth_first_search(board, memory, board_file)
 
     end_time = time.time()
     duration = end_time - start_time
