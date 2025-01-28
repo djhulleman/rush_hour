@@ -8,4 +8,4 @@ from rushhour.visualisation.statespace import *
 # Start the application by calling the start window
 
 
-start_window()
+UserInterface()

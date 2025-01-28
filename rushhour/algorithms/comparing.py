@@ -87,7 +87,6 @@ class Comparing:
             if complete:
                 # return the stap data
                 # to prevent memory overflow, empty memory
-                memory.crear()
                 return board.data
             
     def compare_files(self, path1, path2):

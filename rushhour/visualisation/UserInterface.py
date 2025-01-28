@@ -12,7 +12,7 @@ from rushhour.classes.data import Data
 from rushhour.classes.memory import Memory
 
 # Import the random_solve function or other algorithms from the algorithms folder
-from rushhour.algorithms.random_move import random_solve
+from rushhour.algorithms.random_move import *
 from rushhour.algorithms.random_with_plot import solve_with_visualization
 from rushhour.algorithms.random_with_memory import random_with_memory
 from rushhour.algorithms.comparing import *
@@ -20,7 +20,7 @@ from rushhour.algorithms.Astar import *
 from rushhour.algorithms.BFS import *
 from rushhour.algorithms.hillclimber import *
 
-def start_window():
+def UserInterface():
     """Create the initial window to choose a game board."""
     def select_board(size, game):
         size = int(size)
@@ -108,7 +108,7 @@ def visualize_and_solve(board, memory):
     def run_algorithm(algorithm):
         """Runs the selected algorithm."""
         if algorithm == "1":
-            random_solve(board)
+            random_move(board)
             root.destroy()
         elif algorithm == "2":
             solve_with_visualization(board)
@@ -133,7 +133,10 @@ def visualize_and_solve(board, memory):
             load_solution_file()  # Open file selection for existing solution
             root.destroy()
         elif algorithm == "7":
+            start = deepcopy(board)
             bfs_solver(board, memory)
+            plot_solution(start, "solutions/output.csv")
+
         elif algorithm == "8":
             improve_solution()
         else:
