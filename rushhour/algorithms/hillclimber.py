@@ -7,18 +7,17 @@ import random
 import copy
 import time
 
-
-size = 12
-game = 7
-board_file = f"../../gameboards/Rushhour{size}x{size}_{game}.csv"
 solution_file = "output.csv"
 
-def find_best_random(repetitions):
+def find_best_random(size, game, repetitions):
     """
     Function for finding a solution using the random_with_memory algorithm.
     Based on repetitions, function will run random_with_memory multiple times 
     and return the best solution
     """
+
+    board_file = f"../../gameboards/Rushhour{size}x{size}_{game}.csv"
+
     i = 0 # counter for iterations
     n = float('inf') # set best solution as infinity 
 
@@ -151,13 +150,13 @@ def random_with_memory_for_hill(board, memory, random_pos, n_best):
         print("Failed to solve the puzzle within the maximum number of iterations.")
 
 
-def improve_solution():
+def hillclimber(size, game):
     """
     Function to improve a solution iteratively
     """
     
     # get initial board from random_with_memory algorithm
-    board_best, memory_best, n_best = find_best_random(1)
+    board_best, memory_best, n_best = find_best_random(size, game, 1)
     board_best.data.export_moves('verbetermij.csv')
 
     max_no_solution = 100
@@ -207,10 +206,12 @@ def improve_solution():
 if __name__ == "__main__":
 
     i = 0
+    size = 9
+    game = 5
 
     while True:
 
-        board_best = improve_solution()
+        board_best = hillclimber(size, game)
 
         board_best.data.export_moves(f'output{i}.csv')
         print("\n")
