@@ -152,7 +152,7 @@ def random_with_memory_for_hill(board, memory, random_pos, n_best):
 
 def hillclimber(size, game):
     """
-    Function to improve a solution iteratively
+    Hillclimber function to improve a solution iteratively
     """
     
     # get initial board from random_with_memory algorithm
