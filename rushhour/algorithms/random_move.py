@@ -1,6 +1,6 @@
 import random
 
-def random_solve(board):
+def random_move(board):
     '''algorithm that takes random steps to solve the puzzle'''
     # create object for car that needs to get out
     XX = board.cars["X"] 
