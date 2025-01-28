@@ -19,7 +19,7 @@ class Data:
         Stores moves when at least a car and direction in given
         '''
 
-        # Handle both car object and car name
+        # handle both car object and car name
         car_name = car.car if hasattr(car, 'car') else car
 
         if direction == 1:
