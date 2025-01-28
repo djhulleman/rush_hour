@@ -28,17 +28,13 @@ def load_board(filename, size):
 def binomial(n, k):
     return math.comb(n, k) if k <= n else 0
 
-def factorial(n):
-    return math.factorial(n)
-
 def row_permutations(size, cars, trucks):
     b = 2*cars + 3*trucks
     v = size - b
     if v == size:
         return 1
     S = binomial(v + cars + trucks, cars + trucks)
-    P = factorial(cars + trucks)/(factorial(cars)*factorial(trucks))
-    return S*P
+    return S
 
 # Functie om de statespace te berekenen
 def calculate_statespace(board, size):
@@ -49,12 +45,19 @@ def calculate_statespace(board, size):
         a = cars[i]      # Cars in the row/column
         t = trucks[i]    # Trucks in the row/column
         row_states.append(row_permutations(size, a, t))  # Calculate permutations for this row/column
-    
-    print("Row/Column States:", row_states)
-    print("Total Statespace:", np.prod(row_states))  
+    print("New Statespace:", math.prod(row_states))  
 
+
+def calculate_old_statespace(board, size):
+    cars, trucks = load_board(board, size)
+    a = sum(cars)
+    t = sum(trucks)
+
+    print("Old Statespace:", ((size-1)**a)*((size-2)**t))  
 
 # Voorbeeld gebruik
 if __name__ == '__main__':
     # Inladen van het bordbestand
-    calculate_statespace("gameboards/Rushhour6x6_1.csv", 6)
+    calculate_statespace("gameboards/Rushhour12x12_7.csv", 12)
+    calculate_old_statespace("gameboards/Rushhour9x9_4.csv", 9)
+    

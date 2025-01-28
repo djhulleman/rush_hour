@@ -1,10 +1,19 @@
 # rush_hour
 
-
+## Opzet
+In requirements.txt staat de benodigde packages die gedownload moeten worden. Dit is te instaleren door:
+```
+pip install -r requirements.txt
+```
 ## Experiment
-The alogorithms created are compared in two ways. The algorithm random_move (the baseline), random_with_memory and comparing are compared in outcome. This is done using the algorithm save_outputs. These algorithms do not differ in outcome wether they are solved in a short of long period of time, that is why these are compared only by outcome.
+De gemaakte algoritmen worden op twee manieren vergeleken. Het algoritme random_move (de basislijn), random_with_memory en comparing worden op uitkomst vergeleken. Dit wordt gedaan met behulp van het algoritme save_outputs. De algoritmen verschillen niet in uitkomst, ongeacht of ze in een korte of lange periode worden opgelost, daarom worden ze alleen op uitkomst vergeleken. Save_output kan worden aangeroepen in de main.
 \
-The algorithm hillclimber will be compared to itself in time, this is done to run the algorithm a few hours and collect the data by calling the algorithm in main and timing the running time using start_time = time.time(), end_time = time.time() and execution_time = end_time - start_time.
-the algorithms BFS and Astar only have one outcome, so comparing them in time is not needed. they can be compared in steps.
+Het algoritme hillclimber wordt in de tijd met zichzelf vergeleken. Dit wordt gedaan door ......
 \
-the collected data is in the map solutions. 
+De algoritmen BFS en Astar hebben slechts één uitkomst. Dit is precies dezelfde uitkomst. Aangezien de uitkomst niet anders is in verschillende tijdsduren, wordt dit niet vergeleken qua tijd.
+\
+De verzamelde gegevens bevinden zich in de map solutions.
+\
+Het algoritme om de grafieken te maken met behulp van de gegevens bevindt zich in rushhour/visualisation/histograms.
+
+
