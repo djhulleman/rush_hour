@@ -42,9 +42,9 @@ def combine_moves(input_file = 'output.csv', output_file = 'output.csv'):
 
     # write the combined data to the output file
     with open(output_file, mode='w', newline='') as file:
-        output_file = csv.writer(file)
-        output_file.writerow(['car', 'move'])  # write the header
-        output_file.writerows(combined)
+        outputfile = csv.writer(file)
+        outputfile.writerow(['car', 'move'])  # write the header
+        outputfile.writerows(combined)
 
     print(f"Combine moves saved {output_file}")
 

@@ -1,0 +1,10 @@
+pandas==
+matplotlib==
+copy==
+heapq==
+itertools==
+csv==
+time==
+copy==
+random==
+tkinter==

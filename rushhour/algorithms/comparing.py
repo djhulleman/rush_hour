@@ -130,6 +130,7 @@ class Comparing:
             # store path and steps
             self.overlap_results[list_overlap] = list_overlap.count_moves()
         self.paths.clear()
+        self.paths.clear()
 
     def make_second_pool(self, overlap_data, n):
         '''do random n times and save path'''

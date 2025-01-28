@@ -1,22 +1,11 @@
-from rushhour.classes.board import Board
-from rushhour.classes.memory import Memory
+
 from rushhour.visualisation.UserInterface import *
+from rushhour.algorithms.hillclimber import *
 from rushhour.algorithms.Astar import *
-#from rushhour.algorithms.BFS import *
-from copy import deepcopy
+#from rushhour.algorithms.astarplus import *
 
-size = 6
-game = 1
-
-board_file = f"gameboards/Rushhour{size}x{size}_{game}.csv"
-solution_file = "output.csv"
-
-# Create data processes
-memory = Memory()
-
-board = Board(f'{board_file}', size)
-start = deepcopy(board )
+from rushhour.visualisation.statespace import *
+# Start the application by calling the start window
 
 
-A_Star(board, memory)
-
+UserInterface()

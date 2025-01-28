@@ -4,9 +4,23 @@ from rushhour.classes.board import Board
 from rushhour.algorithms.random_move import *
 from rushhour.algorithms.random_with_memory import *
 from rushhour.algorithms.comparing import *
+from rushhour.algorithms.BFS import breadth_first_search
+from rushhour.algorithms.hillclimber import improve_solution
+import time
+
+"""
+This script contains all functions for running the experiments per algorithm.
+The script contains experiments for the algorithms:
+1. random_move.py
+2. random_with_memory.py
+3. comparing.py
+4. hillclimber.py
+5. BFS.py
+6. A*.py 
+"""
 
 
-def randomly_save(size, game, n):
+def random_move_experiment(size, game, n):
     amount = []
     while len(amount) < n:
         # Create data process 
@@ -14,7 +28,7 @@ def randomly_save(size, game, n):
         # create game board
         board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
         
-        steps = random_solve(board)
+        steps = random_move(board)
         count = steps.data.count_moves()
         amount.append([count])
         
@@ -23,7 +37,7 @@ def randomly_save(size, game, n):
         writer = csv.writer(file)
         writer.writerows(amount)
 
-def random_memory_save(size, game, n):
+def random_with_memory_experiment(size, game, n):
     amount = []
     top_count = 0
     top = ''
@@ -55,7 +69,7 @@ def random_memory_save(size, game, n):
         writer = csv.writer(file)
         writer.writerows(amount)
 
-def compairing_save(board_file, size, game, n):
+def compairing_experiment(board_file, size, game, n):
     amount = []
     count = 0
     top_count = 0
@@ -64,9 +78,9 @@ def compairing_save(board_file, size, game, n):
     botom = ''
     while len(amount) < n:
         # run algorithem
-        compar = Comparing(board_file, size)
-        data = compar.run_comparing()
-        steps = compar.get_steps()
+        compare = Comparing(board_file, size)
+        data = compare.run_comparing()
+        steps = compare.get_steps()
         print(steps)
         count += 1
         print(f'round {count}')
@@ -86,5 +100,32 @@ def compairing_save(board_file, size, game, n):
     with open(new_file, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerows(amount)
+
+def hillclimber_experiment():
+    i = 0
+
+    while True:
+
+        board_best = improve_solution()
+
+        board_best.data.export_moves(f'output{i}.csv')
+        print("\n")
+
+        i += 1
+
+def BFS_experiment(size, game):
+
+    data = Data()
+    memory = Memory()
+    board = Board(f'gameboards/Rushhour{size}x{size}_{game}.csv', size, data)
+
+    start_time = time.time()
+
+    breadth_first_search(board, memory)
+
+    end_time = time.time()
+    duration = end_time - start_time
+ 
+    print(f'Algorithm took: {duration}')
         
         
