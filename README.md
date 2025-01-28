@@ -6,7 +6,7 @@ In requirements.txt staat de benodigde packages die gedownload moeten worden. Di
 pip install -r requirements.txt
 ```
 ## Experiment
-In het algoritme **run_experiments.py** staan alle functies voor het uitvoeren van de experimenten op algorithmes. Voor ieder algorithme is een aparte functie geschreven die het experiment uitvoerd. Ieder functie heeft een eigen **docstring** waarin the werking van het algorimte/experiment staat uitgelegd. 
+In het algoritme **run_experiments.py** staan alle functies voor het uitvoeren van de experimenten op algorithmes. Voor ieder algorithme is een aparte functie geschreven die het experiment uitvoerd. Ieder functie heeft een eigen **docstring** waarin de werking van het algorimte/experiment staat uitgelegd. 
 \
 \
 Voor het uitvoeren van een experiment run je de bijbehorende functie van run_experiments.py in main.py. Let goed op welke input argumenten nodig zijn. Zorg ervoor dat visualize_and_solve(board, memory) is uitgecommend, deze heb je niet nodig voor het uitvoeren van experimenten.
