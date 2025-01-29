@@ -54,7 +54,7 @@ def random_with_memory_experiment(size, game, n):
     amount = []
     top_count = 0
     top = ''
-    botom_count = 10000000000000 # change to float('inf')?
+    botom_count = 10000000000000
     botom = ''
     
     while len(amount) < n:
@@ -132,10 +132,12 @@ def hillclimber_experiment(size, game):
     - solution and their time are printed in the terminal
     - each cycle the best solution is exported as "solutions/Hillclimber/output{i}.csv"
     """
-    i = 0                       # counts each time a new hillclimber cycle is started
-    run_time = 0                # initialize run_time variable 
-    start_time = time.time()    # save start time of algorithm
-    max_runtime = 36000        # 36000 seconds = 10 hour
+    # counts each time a new hillclimber cycle is started
+    i = 0
+    run_time = 0 
+    start_time = time.time()
+    # 36000 seconds = 10 hour
+    max_runtime = 36000        
 
     while run_time < max_runtime :
         # run  hillclimber algorithm
