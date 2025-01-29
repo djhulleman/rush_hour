@@ -109,13 +109,13 @@ def visualize_and_solve(board, memory):
             solve_with_visualization(board)
             root.destroy()
         elif algorithm == "3":
-            begin_state = copy.deepcopy(board)
+            begin_state = deepcopy(board)
             random_with_memory(board, memory)
             board.data.export_moves("solutions/output.csv")
             plot_solution(begin_state, "solutions/output.csv")
             root.destroy()
         elif algorithm == "4":
-            begin_state = copy.deepcopy(board)
+            begin_state = deepcopy(board)
             compare = Comparing(board.name, board.size)
             outcome = compare.run_comparing()
             outcome.export_moves("solutions/compair_path.csv")
