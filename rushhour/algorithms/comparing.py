@@ -1,7 +1,6 @@
 from rushhour.classes.data import Data
 from rushhour.classes.board import Board
-from rushhour.algorithms.random_with_memory import *
-from rushhour.classes.memory import *
+from rushhour.classes.memory import Memory
 from itertools import combinations
 from copy import deepcopy
 import random
