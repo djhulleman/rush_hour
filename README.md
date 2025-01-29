@@ -22,7 +22,7 @@ De verzamelde gegevens bevinden zich in de map solutions.
 
 
 ## Aandachtspunten
-1. De auto's worden verschoven op 2 manieren; met gebruik van 1 (links, omhoog) en 2 (rechts, omlaag) en met gebruik van -1 (links, omhoog) en 1 (rechts, omlaag). Dit kan verwarrend overkomen maar door een misverstand in het er zo uitgekomen. Dit levert geen probleem op bij het runnen van de code.
+1. De auto's worden verschoven op 2 manieren; met gebruik van 1 (links, omhoog) en 2 (rechts, omlaag) en met gebruik van -1 (links, omhoog) en 1 (rechts, omlaag). Dit kan verwarrend overkomen dus let daar goed op. Dit levert geen probleem op bij het runnen van de code.
 2. Data kan geexporteerd worden naar verschillende plekken. In de code kan gezien worden waar naartoe en wat de naam is. Als export_moves() opgeroepen wordt zonder argument erin wordt de data geexporteerd als output.csv in dezelfde map als het algortime staat waarin het gerund wordt. Als er wel een naam neem wordt gegeven of pad, zal dat gevolgt worden.
 
 ## Structuur
