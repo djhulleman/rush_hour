@@ -9,7 +9,7 @@ pip install -r requirements.txt
 In het algoritme **run_experiments.py** staan alle functies voor het uitvoeren van de experimenten op algorithmes. Voor ieder algorithme is een aparte functie geschreven die het experiment uitvoerd. Ieder functie heeft een eigen **docstring** waarin de werking van het algorimte/experiment staat uitgelegd. 
 \
 \
-Voor het uitvoeren van een experiment run je de bijbehorende functie van run_experiments.py in main.py. Let goed op welke input argumenten nodig zijn. Zorg ervoor dat visualize_and_solve(board, memory) is uitgecommend, deze heb je niet nodig voor het uitvoeren van experimenten.
+Voor het uitvoeren van een experiment run je de bijbehorende functie van run_experiments.py in main.py. Let goed op welke input argumenten nodig zijn. Zorg ervoor dat UserInterface() is uitgecommend, deze heb je niet nodig voor het uitvoeren van experimenten.
 \
 \
 De gemaakte algoritmen worden op twee manieren vergeleken. Het algoritme random_move (baseline), random_with_memory en comparing worden op uitkomst vergeleken. Dit wordt gedaan met behulp van het algoritme save_outputs. De algoritmen verschillen niet in uitkomst, ongeacht of ze in een korte of lange periode worden opgelost, daarom worden ze alleen op uitkomst vergeleken.
