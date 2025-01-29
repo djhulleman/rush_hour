@@ -6,7 +6,7 @@ import random
 
 from rushhour.visualisation.UserInterface import draw_board_dynamic
 
-def plot_solution_to_gif(board, solution_file, output_gif="solution_animation.gif"):
+def plot_solution_to_gif(board, solution_file, output_gif="rushhour/visualisation/plots/solution_animation.gif"):
     """Save solution animation as GIF."""
     images = []
     car_colors = {car.car: 'red' if car.car == 'X' else f"#{random.randint(0, 0xFFFFFF):06x}" for car in board.cars.values()}
