@@ -1,5 +1,3 @@
-import random
-
 class Memory:
     """
     Memory class for saving, hasing and comparing board states
