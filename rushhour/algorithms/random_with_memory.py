@@ -1,4 +1,4 @@
-from rushhour.classes.memory import *
+import random
 
 def random_with_memory(board, memory):
     """
