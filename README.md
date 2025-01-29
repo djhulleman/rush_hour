@@ -28,10 +28,10 @@ De verzamelde gegevens bevinden zich in de map solutions.
 ## Structuur
 De files en algoritmes zijn ingedeeld volgens dit schema:
 - **/rushhour**: bevat alle code van dit project
-  - **/code/algorithms**: bevat de code voor algoritmes
-  - **/code/classes**: bevat de classes voor deze case
-  - **/code/visualisation**: bevat de code voor visualisatie
-- **/solutions**: bevat de data dat is verzemeld tijdens de experimeneten
+  - **/rushhour/algorithms**: bevat de code voor algoritmes
+  - **/rushhour/classes**: bevat de classes voor deze case
+  - **/rushhour/visualisation**: bevat de code voor visualisatie
+- **/solutions**: bevat mappen met data dat is verzemeld tijdens de experimeneten
 
 ## Code runnen
 In de main kan de code geruned worden. Door UserInterface() te runnen kan er gekozen worden welk board en welk algoritme. Vervolgends wordt er een visualisatie gemaakt van de stappen die het algoritme maakt. Ook is er een optie om een al bestaande file te kiezen uit solutions en die stappen te laten zien. Er kan bijvoorbeeld gekozen worden voor de file solutions/random_with_memory/botom_game1.csv. Deze file bevat de preciese stappen van de laagst gevonden aantal stappen.
