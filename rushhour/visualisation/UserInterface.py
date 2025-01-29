@@ -165,7 +165,7 @@ def visualize_and_solve(board, memory):
     tk.Button(root, text="5. A* Algorithm", command=lambda: run_algorithm("5")).pack(fill="x", padx=20, pady=5)
     tk.Button(root, text="6. Plot Existing Solution", command=lambda: run_algorithm("6")).pack(fill="x", padx=20, pady=5)
     tk.Button(root, text="7. BFS", command=lambda: run_algorithm("7")).pack(fill="x", padx=20, pady=5)
-    tk.Button(root, text="8. Hillclimber", command=lambda: run_algorithm("8")).pack(fill="x", padx=20, pady=5)
+    tk.Button(root, text="8. Hillclimber (90 min)", command=lambda: run_algorithm("8")).pack(fill="x", padx=20, pady=5)
 
     # Start the GUI event loop
     root.mainloop()

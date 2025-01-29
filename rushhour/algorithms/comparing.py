@@ -130,7 +130,6 @@ class Comparing:
             # store path and steps
             self.overlap_results[list_overlap] = list_overlap.count_moves()
         self.paths.clear()
-        self.paths.clear()
 
     def make_second_pool(self, overlap_data, n):
         '''do random n times and save path'''
@@ -148,19 +147,16 @@ class Comparing:
     def run_comparing(self):
         '''algarithem that finds the best path'''
         # make 50 paths
-        self.make_first_pool(20)
-        print("one done")
+        self.make_first_pool(50)
         # compair the paths and make a top 30
-        self.get_highest_compar(14)
-        print("two done")
+        self.get_highest_compar(30)
         # Get the maximum overlap result
         # get the steps amount
         max_overlap = max(self.overlap_results.values())
         # get the joint dataset
         max_key = next(pair for pair, overlap in self.overlap_results.items() if overlap == max_overlap)
-        print(max_key.output_data)
         # make 20 new paths
-        self.make_second_pool(max_key, 8)
+        self.make_second_pool(max_key, 20)
         '''take the fastes path and make it the output'''
         # find the fastest path
         # get the steps
