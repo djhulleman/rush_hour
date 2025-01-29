@@ -134,8 +134,9 @@ def visualize_and_solve(board, memory):
             root.destroy()
         elif algorithm == "7":
             start = deepcopy(board)
-            bfs_solver(board, memory)
-            plot_solution(start, "solutions/output.csv")
+            solution = bfs_solver(board, memory)
+            export_solution(board, board.name, solution)
+            plot_solution(start, "solutions/breadth-first-search/output.csv")
 
         elif algorithm == "8":
             hillclimber(board.size, board.name[-5])
@@ -258,7 +259,7 @@ def plot_solution(board, solution_file):
                     # Update the plot dynamically
                     ax.clear()
                     draw_board_dynamic(board, ax, car_colors)
-                    plt.pause(0.5)  # Pause for animation effect
+                    plt.pause(0.001)  # Pause for animation effect
                 else:
                     print(f"Move {i + 1}: Invalid move for car {car}: {move}")
             except (IndexError, ValueError) as e:
