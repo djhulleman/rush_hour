@@ -1,10 +1,4 @@
-pandas==
-matplotlib==
-copy==
-heapq==
-itertools==
-csv==
-time==
-copy==
-random==
-tkinter==
+matplotlib==3.10.0
+numpy==2.2.2
+pandas==2.2.3
+tk==0.1.0
