@@ -1,5 +1,5 @@
 # rush_hour
-
+Rush hour is een bordspel waarmee als doel om de auto's op het bord op zo'n manier te verschuiven dat de rode auto naar buiten kan. Dit kan op verschillende manieren en volgorden gedaan worden. Door het uit testen van verschillende gemmakte algoritme was het doel van dit project om te kijken welk algoritme het best het bordspel kan oplossen.
 ## Opzet
 In requirements.txt staat de benodigde packages die gedownload moeten worden. Dit is te instaleren door:
 ```
@@ -25,4 +25,19 @@ De verzamelde gegevens bevinden zich in de map solutions.
 1. De auto's worden verschoven op 2 manieren; met gebruik van 1 (links, omhoog) en 2 (rechts, omlaag) en met gebruik van -1 (links, omhoog) en 1 (rechts, omlaag). Dit kan verwarrend overkomen maar door een misverstand in het er zo uitgekomen. Dit levert geen probleem op bij het runnen van de code.
 2. Data kan geexporteerd worden naar verschillende plekken. In de code kan gezien worden waar naartoe en wat de naam is. Als export_moves() opgeroepen wordt zonder argument erin wordt de data geexporteerd als output.csv in dezelfde map als het algortime staat waarin het gerund wordt. Als er wel een naam neem wordt gegeven of pad, zal dat gevolgt worden.
 
+## Structuur
+De files en algoritmes zijn ingedeeld volgens dit schema:
+\
+- **/rushhour**: bevat alle code van dit project
+  - **/code/algorithms**: bevat de code voor algoritmes
+  - **/code/classes**: bevat de classes voor deze case
+  - **/code/visualisation**: bevat de code voor visualisatie
+- **/solutions**: bevat de data dat is verzemeld tijdens de experimeneten
 
+## Code runnen
+In de main kan de code geruned worden. Door UserInterface() te runnen kan er gekozen worden welk board en welk algoritme. Vervolgends wordt er een visualisatie gemaakt van de stappen die het algoritme maakt. Ook is er een optie om een al bestaande file te kiezen uit solutions en die stappen te laten zien. Er kan bijvoorbeeld gekozen worden voor de file solutions/random_with_memory/botom_game1.csv. Deze file bevat de preciese stappen van de laagst gevonden aantal stappen.
+
+## Auteurs
+- Dinand Hulleman
+- Bas van Daalen
+- Anne Snijder
