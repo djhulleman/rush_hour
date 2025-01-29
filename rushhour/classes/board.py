@@ -159,7 +159,6 @@ class Board:
     def move(self, car, direction, steps=1):
         '''move car on game board'''
         if not self.check_move(car, direction, steps):  # Pass car's name to check_move
-            print("Invalid move")
             return
 
         car = self.cars[car]  # Access the Car object after validation

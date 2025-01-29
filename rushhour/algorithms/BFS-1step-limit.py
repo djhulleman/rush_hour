@@ -7,7 +7,7 @@ def bfs_solver(board, memory):
     """
     Perform a BFS to find the shortest solution.
     This algorithm limits the maximum step per car to 1. 
-    This will decrease the size of the state-space.
+    This will change the shape and search sequence of the state-space.
     """
     # save the initial state in memory and save its index
     car_names = board.cars.keys()

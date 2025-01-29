@@ -1,7 +1,8 @@
 from collections import deque
+from rushhour.classes.data import Data
+from rushhour.classes.board import Board
 from rushhour.algorithms.shorten_csv import combine_moves
 import csv
-import time
 
 def bfs_solver(board, memory):
     """
@@ -65,12 +66,14 @@ def bfs_solver(board, memory):
     print("BFS: no solution found.")
     return None
 
-def export_solution(solution_moves):
+def export_solution(board, board_file, solution_moves):
     """
     After BFS the output_data list of the current Data class does contain all moves made by the algorithm.
     To extract the shortest path from the algorithm we have to extract the tuples containing the moves from the list paths,
     which got returned by bfs_solve()
     """
+
+    size = board.size
 
     if solution_moves == None:
         return None
@@ -83,10 +86,10 @@ def export_solution(solution_moves):
 
     board_correct_path.move('X',2)
 
-    board_correct_path.data.export_moves("solutions/output.csv")
+    board_correct_path.data.export_moves("solutions/breadth-first-search/output.csv")
 
 
-def print_solution(board, n, input_file = 'output.csv'):
+def print_solution(board, n, input_file = 'solutions/breadth-first-search/output.csv'):
     """
     Prints a user friendly list containing the solution in the terminal
     """
@@ -110,41 +113,20 @@ def print_solution(board, n, input_file = 'output.csv'):
             elif move > 0 and car_object.orientation == "V":
                 print(f'{car} {move} naar beneden')
 
-def breadth_first_search(board, memory):
+def breadth_first_search(board, memory, board_file):
+    """
+    run the breadth-first-search algorithm
+    - exports the solution to "solutions/breadth-first-search/output.csv
+    """
 
     # perform breadth first search: returns the shortest solution path
     solution = bfs_solver(board, memory)
 
     # export the solution into a csv
-    export_solution(solution)
+    export_solution(board, board_file, solution)
 
     # shorten the csv list by combining consecutive moves
-    n = combine_moves()
+    n = combine_moves("solutions/breadth-first-search/output.csv", "solutions/breadth-first-search/output.csv")
 
     # print user friendly solution in terminal
     print_solution(board, n)
-
-if __name__ == "__main__":
- 
-    from rushhour.classes.board import Board
-    from rushhour.classes.memory import Memory
-    from rushhour.classes.data import Data
-
-    # For example, load a 6x6 puzzle from a CSV:
-    data = Data()
-    memory = Memory()
-    size = 6
-    board_file = "../../gameboards/Rushhour6x6_1.csv"  # or "Rushhour6x6_1.csv", etc.
-    board = Board(board_file, size, data)
-
-    start_time = time.time()
-
-    breadth_first_search(board, memory)
-
-    end_time = time.time()
-    duration = end_time - start_time
- 
-    print(f'Algorithm took: {duration}')
-
-
-  
