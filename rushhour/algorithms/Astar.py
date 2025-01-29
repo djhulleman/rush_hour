@@ -8,57 +8,50 @@ counter = itertools.count()
 
 def A_Star(board, heuristic_type=0):
     """
-    Runs an A* search on the given Rush Hour board.
     heuristic_type = 0 -> blocking_cars_heuristic
     heuristic_type = 1 -> moves_needed_heuristic
     heuristic_type = 2 -> tiered_blocking_heuristic
     """
-    # Initialize a Data object to store the moves
-    data = Data()
-    board.data = data  # Link the board's data to this instance
-
     # Initialize priority queue for A* (f, counter, board)
     queue = []
+
     # The cost-so-far (g) for the initial board is 0, so priority = g + h.
-    # We'll compute h below before pushing. For now, do h=0 as a placeholder.
     heapq.heappush(queue, (0, next(counter), board))
 
-    # Instead of a simple set, keep track of the best cost encountered so far
     visited = {}
 
     while queue:
-        # Get the board with the lowest f (cost + heuristic)
+        # Get the board with the lowest f
         f, _, current_board = heapq.heappop(queue)
 
         # Check if the puzzle is solved
         if current_board.check_finish():
             # Export the moves when the solution is found
             current_board.data.export_moves("solutions/output.csv")
-            return current_board  # Return the winning board
+            return current_board
 
         # Compute cost so far for the current board
         current_g = len(current_board.history)
         current_hash = hash_board_state(current_board)
 
-        # If we've visited this exact state with an equal or lower cost, skip
+        # Skip if we've visited this exact state with equal or lower cost
         if current_hash in visited and visited[current_hash] <= current_g:
             continue
 
-        # Record that we've now found this state with cost current_g
+        # Record that we've now found this state with cost
         visited[current_hash] = current_g
 
-        # Generate possible next states (children)
+        # Generate possible next children
         children = generate_children(current_board)
 
         for child in children:
-            # g for child is length of child's history
             child_g = len(child.history)
             child_hash = hash_board_state(child)
 
-            # If we've never seen this child or we found a cheaper way to reach it
+            # If we've never seen this child or we found or cheaper 
             if child_hash not in visited or child_g < visited[child_hash]:
-                # Choose the heuristic based on user selection
 
+                # Choose the heuristic based on user selection
                 h = blocking_cars_heuristic(child)
 
                 # f = g + h

@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import simpledialog
 import csv
 import random
-import copy
+from copy import deepcopy, copy
 from tkinter import messagebox
 
 from rushhour.classes.board import Board
@@ -12,16 +12,15 @@ from rushhour.classes.data import Data
 from rushhour.classes.memory import Memory
 
 # Import the random_solve function or other algorithms from the algorithms folder
-from rushhour.algorithms.random_move import *
+from rushhour.algorithms.random_move import random_move
 from rushhour.algorithms.random_with_plot import solve_with_visualization
 from rushhour.algorithms.random_with_memory import random_with_memory
-from rushhour.algorithms.comparing import *
-from rushhour.algorithms.Astar import *
-from rushhour.algorithms.BFS import *
-from rushhour.algorithms.hillclimber import *
+from rushhour.algorithms.comparing import Comparing
+from rushhour.algorithms.Astar import A_Star
+from rushhour.algorithms.BFS import bfs_solver, export_solution
+from rushhour.algorithms.hillclimber import hillclimber
 
 def UserInterface():
-    """Create the initial window to choose a game board."""
     def select_board(size, game):
         size = int(size)
         board_file = f"gameboards/Rushhour{size}x{size}_{game}.csv"
@@ -55,7 +54,6 @@ def UserInterface():
     root.mainloop()
 
 def plot_board(board):
-    """Plots the Rush Hour board."""
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.set_xlim(0, board.size)
     ax.set_ylim(0, board.size)
@@ -100,11 +98,8 @@ def plot_board(board):
     ax.set_frame_on(False)
     plt.show()
 
-# Other methods: draw_board_dynamic, plot_solution, count_moves, visualize_and_solve, etc. (unchanged)
 
 def visualize_and_solve(board, memory):
-    """Plots the board and provides a GUI with buttons for choosing a solving method."""
-    
     def run_algorithm(algorithm):
         """Runs the selected algorithm."""
         if algorithm == "1":
@@ -144,17 +139,14 @@ def visualize_and_solve(board, memory):
             messagebox.showerror("Error", "Invalid algorithm selected.")
 
     def load_solution_file():
-        """Prompts the user to input the solution file."""
         solution_file = simpledialog.askstring("Enter Solution File", "Enter the solution file path:")
         if solution_file:
             plot_solution(board, solution_file)
 
-    # Initialize the main GUI window
     root = tk.Tk()
     root.title("Rush Hour Solver")
-    root.geometry("600x600")  # Set window size
+    root.geometry("600x600")
     
-    # Add a label at the top
     tk.Label(root, text="Select a solving algorithm:", font=("Arial", 14)).pack(pady=10)
     
     # Add buttons for each algorithm
@@ -171,7 +163,6 @@ def visualize_and_solve(board, memory):
     root.mainloop()
 
 def draw_board_dynamic(board, ax, car_colors):
-    '''Graphically update the Rush Hour board dynamically during each move'''
     # Clear the previous board state
     ax.clear()
     ax.set_xlim(0, board.size)
@@ -217,10 +208,6 @@ def draw_board_dynamic(board, ax, car_colors):
 
 
 def plot_solution(board, solution_file):
-    """
-    Visualizes the solution for the board by reading a solution file
-    and animating the moves dynamically.
-    """
     data = Data()
     # Initialize the plot
     fig, ax = plt.subplots(figsize=(6, 6))
