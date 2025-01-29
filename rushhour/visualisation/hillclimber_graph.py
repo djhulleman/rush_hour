@@ -1,24 +1,51 @@
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 
-# Replace 'file_path.csv' with your actual file name
-data = pd.read_csv("solutions/Hillclimber/cleaned_results.csv")
-print(data.head())  # Display the first few rows to inspect data structure
+# Sample data directly parsed from your problem statement
+data = [
+    [19271, 0, 34250, 0, 7867, 0, 10696, 0, 36982, 0, 34994, 0, 6783, 0],
+    [6268, 1, 9523, 1, 6377, 4, 9907, 2, 34312, 1, 32239, 3, 5509, 0.48],
+    [5295, 3, 9456, 2, 4554, 7, 8617, 4, 31198, 5, 29215, 4, 4703, 1.31],
+    [4451, 14, 6313, 4, 4535, 8, 8585, 8, 19009, 9, 25314, 6, 3659, 1.93],
+    [3436, 20, 5610, 8, 1116, 12, 8170, 11, 2688, 9, 22568, 7, 3470, 2.07],
+    [3340, 26, 4657, 12, 1044, 12, 8154, 11, 2635, 20, 18477, 11, 3226, 11.47],
+    [3325, 27, 4586, 12, 652, 13, 5445, 15, 1259, 32, 6690, 12, 2793, 12.82],
+    [2887, 34, 3621, 12, 580, 13, 4577, 24, 1249, 32, 5879, 12, 2721, 12.91],
+    [1241, 36, 3499, 12, 320, 14, 4460, 30, 1092, 34, 4020, 12, 1926, 13.03],
+    [1195, 39, 2935, 22, 299, 15, 3793, 31, 1086, 43, 3658, 15, 1890, 13.46],
+    [1105, 49, 2809, 29, 288, 28, 2351, 33, 596, 60, 3263, 25, 1807, 13.52],
+    [1058, 50, 2769, 34, 286, 28, 1521, 58, 497, 60, 2894, 37, 1798, 13.61],
+    [1004, 52, 2297, 35, 281, 29, 850, 63, 492, 104, 2265, 41, 1780, 17.5],
+    [964, 63, 2075, 41, 275, 29, 771, 92, 424, 108, 2091, 43, 933, 32.33],
+    [929, 70, 983, 48, 241, 31, 569, 93, 419, 120, 1206, 46, 924, 32.36],
+    [864, 75, 894, 49, 206, 31, 565, 105, 418, 120, 997, 62, 885, 47.45],
+    [861, 75, 891, 103, 178, 31, 546, 111, 415, 128, 616, 72, 844, 83.75],
+    [859, 75, 859, 112, 172, 35, 491, 111, 378, 135, 598, 73, 631, 127.34],
+    [848, 95, 839, 170, 158, 44, 467, 160, 377, 135, 596, 75, 620, 127.36],
+    [831, 125, 721, 175, 142, 45, 448, 161, 349, 138, 593, 75, 488, 154.39]
+]
 
-# Clean up columns by dropping "Unnamed" columns
-data = data.loc[:, ~data.columns.str.contains('^Unnamed')]
 
+# Create column labels
+columns = ["Steps1", "Time1", "Steps2", "Time2", "Steps3", "Time3", 
+           "Steps4", "Time4", "Steps5", "Time5", "Steps6", "Time6", "Steps7", "Time7"]
 
-# Line plots for all steps series
+# Load data into DataFrame
+df = pd.DataFrame(data, columns=columns)
+
+# Plot each steps series against time
 plt.figure(figsize=(12, 6))
 
-# Plot each 'steps' column
-for col in data.columns:
-    plt.plot(data.index, data[col], label=col)
+for i in range(1, 8):
+    steps_col = f"Steps{i}"
+    time_col = f"Time{i}"
 
-plt.title("Hillclimbers 12x12")
+    if steps_col in df.columns and time_col in df.columns:
+        plt.plot(df[time_col], df[steps_col], label=f"Steps {i}")
+
+plt.title("Hillclimbers 9x9 6")
 plt.xlabel("Time")
-plt.ylabel("Solution steps")
+plt.ylabel("Steps")
 plt.legend()
 plt.grid(True)
 plt.show()

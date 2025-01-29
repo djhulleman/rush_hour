@@ -259,7 +259,7 @@ def plot_solution(board, solution_file):
                     # Update the plot dynamically
                     ax.clear()
                     draw_board_dynamic(board, ax, car_colors)
-                    plt.pause(0.001)  # Pause for animation effect
+                    plt.pause(0.1)  # Pause for animation effect
                 else:
                     print(f"Move {i + 1}: Invalid move for car {car}: {move}")
             except (IndexError, ValueError) as e:
