@@ -1,8 +1,6 @@
 import csv
 from rushhour.classes.car import Car
 from rushhour.classes.data import Data
-from rushhour.classes.memory import Memory
-
 
 class Board:
     '''create a board opject with the cars on it'''
