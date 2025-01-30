@@ -1,5 +1,5 @@
 # rush_hour
-Rush hour is een bordspel waarmee als doel om de auto's op het bord op zo'n manier te verschuiven dat de rode auto naar buiten kan. Dit kan op verschillende manieren en volgorden gedaan worden. Door het uit testen van verschillende gemmakte algoritme was het doel van dit project om te kijken welk algoritme het best het bordspel kan oplossen.
+Rush hour is een bordspel met als doel om de auto's op het bord op zo'n manier te verschuiven dat de rode auto naar buiten kan. Dit kan op verschillende manieren en volgorden gedaan worden. Door het uit testen van verschillende gemmakte algoritme was het doel van dit project om te kijken welk algoritme het best het bordspel kan oplossen.
 ## Opzet
 In requirements.txt staat de benodigde packages die gedownload moeten worden. De python versie dat is gebruikt is Python 3.10.12. requirements is te instaleren door:
 ```
